@@ -1,0 +1,15 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: onsdigital/dp-concourse-tools-nancy
+    tag: latest
+
+inputs:
+  - name: dp-feedback-api
+    path: dp-feedback-api
+
+run:
+  path: dp-feedback-api/ci/scripts/audit.sh

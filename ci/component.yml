@@ -1,0 +1,15 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: golang
+    tag: 1.19.4
+
+inputs:
+  - name: dp-feedback-api
+
+run:
+  path: dp-feedback-api/ci/scripts/component.sh
