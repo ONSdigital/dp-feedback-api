@@ -13,10 +13,8 @@ var ctx = context.Background()
 
 // TODO: remove hello world handler test
 func TestHelloHandler(t *testing.T) {
-
 	Convey("Given a Hello handler ", t, func() {
 		helloHandler := HelloHandler(ctx)
-
 		Convey("when a good response is returned", func() {
 			req := httptest.NewRequest("GET", "http://localhost:8080/hello", nil)
 			resp := httptest.NewRecorder()
@@ -26,6 +24,5 @@ func TestHelloHandler(t *testing.T) {
 			So(resp.Code, ShouldEqual, http.StatusOK)
 			So(resp.Body.String(), ShouldResemble, `{"message":"Hello, World!"}`)
 		})
-
 	})
 }

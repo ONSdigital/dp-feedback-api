@@ -2,12 +2,12 @@ package steps
 
 import (
 	"context"
-	"github.com/ONSdigital/dp-feedback-api/config"
-	"github.com/ONSdigital/dp-feedback-api/service"
-	"github.com/ONSdigital/dp-feedback-api/service/mock"
 	"net/http"
 
 	componenttest "github.com/ONSdigital/dp-component-test"
+	"github.com/ONSdigital/dp-feedback-api/config"
+	"github.com/ONSdigital/dp-feedback-api/service"
+	"github.com/ONSdigital/dp-feedback-api/service/mock"
 	"github.com/ONSdigital/dp-healthcheck/healthcheck"
 )
 
@@ -23,7 +23,6 @@ type Component struct {
 }
 
 func NewComponent() (*Component, error) {
-
 	c := &Component{
 		HTTPServer:     &http.Server{},
 		errorChan:      make(chan error),
@@ -73,7 +72,7 @@ func (c *Component) InitialiseService() (http.Handler, error) {
 	return c.HTTPServer.Handler, nil
 }
 
-func (c *Component) DoGetHealthcheckOk(cfg *config.Config, buildTime string, gitCommit string, version string) (service.HealthChecker, error) {
+func (c *Component) DoGetHealthcheckOk(cfg *config.Config, buildTime, gitCommit, version string) (service.HealthChecker, error) {
 	return &mock.HealthCheckerMock{
 		AddCheckFunc: func(name string, checker healthcheck.Checker) error { return nil },
 		StartFunc:    func(ctx context.Context) {},
