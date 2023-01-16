@@ -2,22 +2,72 @@ package api
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 
+	"github.com/ONSdigital/dp-feedback-api/config"
+	"github.com/ONSdigital/log.go/v2/log"
 	"github.com/gorilla/mux"
 )
 
 // API provides a struct to wrap the api around
 type API struct {
-	Router *mux.Router
+	Cfg         *config.Config
+	Router      *mux.Router
+	emailSender EmailSender
 }
 
 // Setup function sets up the api and returns an api
-func Setup(ctx context.Context, r *mux.Router) *API {
+func Setup(ctx context.Context, cfg *config.Config, r *mux.Router, e EmailSender) *API {
 	api := &API{
-		Router: r,
+		Cfg:         cfg,
+		Router:      r,
+		emailSender: e,
 	}
 
-	// TODO: remove hello world example handler route
+	// TODO: remove hello world example handler route when component tests are no longer using it
 	r.HandleFunc("/hello", HelloHandler(ctx)).Methods("GET")
+	api.post("/feedback", api.PostFeedback)
 	return api
+}
+
+// post registers a POST http.HandlerFunc.
+func (api *API) post(path string, handler http.HandlerFunc) {
+	api.Router.HandleFunc(path, handler).Methods(http.MethodPost)
+}
+
+// unmarshal is an aux function to read the provided ReadCloser and unmarshal it to the provided model struct
+func unmarshal(body io.ReadCloser, v interface{}) error {
+	b, err := io.ReadAll(body)
+	if err != nil {
+		return fmt.Errorf("failed to read req body: %w", err)
+	}
+
+	if err = json.Unmarshal(b, v); err != nil {
+		return fmt.Errorf("failed to unmarshal req body into a model: %s", err)
+	}
+	return nil
+}
+
+// WriteJSON responds generates
+func (api *API) WriteJSON(ctx context.Context, w http.ResponseWriter, status int, resp interface{}) error {
+	b, err := json.Marshal(resp)
+	if err != nil {
+		return fmt.Errorf("failed to marshal response: %w", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(status)
+
+	if _, err = w.Write(b); err != nil {
+		return fmt.Errorf("failed to write response: %w", err)
+	}
+	return nil
+}
+
+func (api *API) handleError(ctx context.Context, w http.ResponseWriter, err error, status int) {
+	log.Error(ctx, "request failed", err)
+	http.Error(w, err.Error(), status)
 }

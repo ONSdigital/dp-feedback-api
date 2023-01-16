@@ -25,6 +25,13 @@ func TestConfig(t *testing.T) {
 					GracefulShutdownTimeout:    5 * time.Second,
 					HealthCheckInterval:        30 * time.Second,
 					HealthCheckCriticalTimeout: 90 * time.Second,
+					OnsDomain:                  "localhost",
+					Mail: &Mail{
+						Host:     "localhost",
+						Port:     "1025",
+						User:     "",
+						Password: "",
+					},
 				})
 			})
 			Convey("Then a second call to config should return the same config", func() {
