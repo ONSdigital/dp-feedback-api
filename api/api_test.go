@@ -3,22 +3,21 @@ package api
 import (
 	"context"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/ONSdigital/dp-feedback-api/config"
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestSetup(t *testing.T) {
 	Convey("Given an API instance", t, func() {
-		r := mux.NewRouter()
+		r := chi.NewRouter()
 		ctx := context.Background()
 		cfg := &config.Config{
 			OnsDomain: "localhost",
 		}
-		api := Setup(ctx, cfg, r, nil)
+		api := Setup(ctx, cfg, r, nil, nil)
 
 		Convey("When created the following routes should have been added", func() {
 			So(hasRoute(api.Router, "/feedback", http.MethodPost), ShouldBeTrue)
@@ -26,8 +25,6 @@ func TestSetup(t *testing.T) {
 	})
 }
 
-func hasRoute(r *mux.Router, path, method string) bool {
-	req := httptest.NewRequest(method, path, nil)
-	match := &mux.RouteMatch{}
-	return r.Match(req, match)
+func hasRoute(r chi.Router, path, method string) bool {
+	return r.Match(chi.NewRouteContext(), method, path)
 }

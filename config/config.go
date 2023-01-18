@@ -13,6 +13,7 @@ type Config struct {
 	HealthCheckInterval        time.Duration `envconfig:"HEALTHCHECK_INTERVAL"`
 	HealthCheckCriticalTimeout time.Duration `envconfig:"HEALTHCHECK_CRITICAL_TIMEOUT"`
 	OnsDomain                  string        `envconfig:"ONS_DOMAIN"`
+	ZebedeeURL                 string        `envconfig:"ZEBEDEE_URL"`
 	Mail                       *Mail
 }
 
@@ -22,6 +23,8 @@ type Mail struct {
 	User     string `envconfig:"MAIL_USER"`
 	Password string `envconfig:"MAIL_PASSWORD" json:"-"`
 	Port     string `envconfig:"MAIL_PORT"`
+	To       string `envconfig:"MAIL_TO"`
+	From     string `envconfig:"MAIL_FROM"`
 }
 
 var cfg *Config
@@ -39,6 +42,7 @@ func Get() (*Config, error) {
 		HealthCheckInterval:        30 * time.Second,
 		HealthCheckCriticalTimeout: 90 * time.Second,
 		OnsDomain:                  "localhost",
+		ZebedeeURL:                 "http://localhost:8082",
 		Mail: &Mail{
 			Host:     "localhost",
 			Port:     "1025",

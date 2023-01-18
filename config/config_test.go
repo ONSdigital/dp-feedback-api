@@ -26,6 +26,7 @@ func TestConfig(t *testing.T) {
 					HealthCheckInterval:        30 * time.Second,
 					HealthCheckCriticalTimeout: 90 * time.Second,
 					OnsDomain:                  "localhost",
+					ZebedeeURL:                 "http://localhost:8082",
 					Mail: &Mail{
 						Host:     "localhost",
 						Port:     "1025",

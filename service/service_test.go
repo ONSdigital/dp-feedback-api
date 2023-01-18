@@ -93,7 +93,8 @@ func TestInit(t *testing.T) {
 				So(svc.HealthCheck, ShouldResemble, hcMock)
 
 				Convey("Then all checks are registered (none yet)", func() {
-					So(hcMock.AddCheckCalls(), ShouldHaveLength, 0)
+					So(hcMock.AddCheckCalls(), ShouldHaveLength, 1)
+					So(hcMock.AddCheckCalls()[0].Name, ShouldEqual, "Zebedee")
 				})
 			})
 		})

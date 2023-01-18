@@ -1,17 +1,17 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"net/mail"
 	"net/url"
-	"strings"
 
 	"github.com/ONSdigital/dp-feedback-api/config"
 )
 
 type Feedback struct {
-	IsPageUseful      bool   `json:"is_page_useful"`
-	IsGeneralFeedback bool   `json:"is_general_feedback"`
+	IsPageUseful      *bool  `json:"is_page_useful"`
+	IsGeneralFeedback *bool  `json:"is_general_feedback"`
 	OnsURL            string `json:"ons_url,omitempty"`
 	Feedback          string `json:"feedback,omitempty"`
 	Name              string `json:"name,omitempty"`
@@ -19,31 +19,37 @@ type Feedback struct {
 }
 
 func (f *Feedback) Validate(cfg *config.Config) error {
-	if _, err := mail.ParseAddress(f.EmailAddress); err != nil {
-		return fmt.Errorf("invalid email address: %w", err)
+	if f.IsPageUseful == nil {
+		return errors.New("is_page_useful is compulsory")
 	}
 
-	onsURL, err := url.Parse(f.OnsURL)
-	if err != nil {
-		return fmt.Errorf("invalid ons url: %w", err)
+	if f.IsGeneralFeedback == nil {
+		return errors.New("is_general_feedback is compulsory")
 	}
 
-	if onsURL.Hostname() != cfg.OnsDomain {
-		return fmt.Errorf("unexpected ons domain name: %s", onsURL.Hostname())
+	if f.EmailAddress != "" {
+		if _, err := mail.ParseAddress(f.EmailAddress); err != nil {
+			return fmt.Errorf("invalid email address: %w", err)
+		}
 	}
 
-	if err := sanitize(f.OnsURL, f.Feedback, f.Name, f.EmailAddress); err != nil {
-		return fmt.Errorf("sanitization error: %w", err)
+	if f.OnsURL != "" {
+		onsURL, err := url.Parse(f.OnsURL)
+		if err != nil {
+			return fmt.Errorf("invalid ons url: %w", err)
+		}
+
+		if onsURL.Hostname() != cfg.OnsDomain {
+			return fmt.Errorf("unexpected ons domain name: %s", onsURL.Hostname())
+		}
 	}
+
 	return nil
 }
 
-func sanitize(strs ...string) error {
-	// TODO check for html injection, sql injection, nosql injection
-	for _, toSanitize := range strs {
-		if strings.ContainsAny(toSanitize, "&^%") {
-			return fmt.Errorf("%s contains invalid characters", toSanitize)
-		}
-	}
-	return nil
+func (f *Feedback) Sanitize() {
+	f.OnsURL = Sanitize(f.OnsURL)
+	f.Feedback = Sanitize(f.Feedback)
+	f.Name = Sanitize(f.Name)
+	f.EmailAddress = Sanitize(f.EmailAddress)
 }

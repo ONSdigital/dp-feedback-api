@@ -7,35 +7,46 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/ONSdigital/dp-api-clients-go/v2/identity"
 	"github.com/ONSdigital/dp-feedback-api/config"
+	"github.com/ONSdigital/dp-feedback-api/middleware"
 	"github.com/ONSdigital/log.go/v2/log"
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 )
 
 // API provides a struct to wrap the api around
 type API struct {
-	Cfg         *config.Config
-	Router      *mux.Router
-	emailSender EmailSender
+	Cfg            *config.Config
+	Router         chi.Router
+	IdentityClient *identity.Client
+	EmailSender    EmailSender
 }
 
 // Setup function sets up the api and returns an api
-func Setup(ctx context.Context, cfg *config.Config, r *mux.Router, e EmailSender) *API {
+func Setup(ctx context.Context, cfg *config.Config, r chi.Router, idc *identity.Client, e EmailSender) *API {
 	api := &API{
-		Cfg:         cfg,
-		Router:      r,
-		emailSender: e,
+		Cfg:            cfg,
+		Router:         r,
+		IdentityClient: idc,
+		EmailSender:    e,
 	}
 
-	// TODO: remove hello world example handler route when component tests are no longer using it
-	r.HandleFunc("/hello", HelloHandler(ctx)).Methods("GET")
-	api.post("/feedback", api.PostFeedback)
+	api.mountEndpoints(ctx)
+
 	return api
 }
 
-// post registers a POST http.HandlerFunc.
-func (api *API) post(path string, handler http.HandlerFunc) {
-	api.Router.HandleFunc(path, handler).Methods(http.MethodPost)
+// mountEndpoints creates a a new chi Router with the auth middleware and required endpoints,
+// and then mounts it to the existing router, in order to prevent existing endpoints (i.e. /health) to go through auth.
+func (api *API) mountEndpoints(ctx context.Context) {
+	r := chi.NewRouter()
+	middleware.UseAuth(r, api.IdentityClient)
+
+	// TODO: remove hello world example handler route when component tests are no longer using it
+	r.Get("/hello", HelloHandler(ctx))
+	r.Post("/feedback", api.PostFeedback)
+
+	api.Router.Mount("/", r)
 }
 
 // unmarshal is an aux function to read the provided ReadCloser and unmarshal it to the provided model struct
