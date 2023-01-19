@@ -50,7 +50,7 @@ func (api *API) mountEndpoints(ctx context.Context) {
 }
 
 // unmarshal is an aux function to read the provided ReadCloser and unmarshal it to the provided model struct
-func unmarshal(body io.ReadCloser, v interface{}) error {
+func Unmarshal(body io.ReadCloser, v interface{}) error {
 	b, err := io.ReadAll(body)
 	if err != nil {
 		return fmt.Errorf("failed to read req body: %w", err)

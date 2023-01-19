@@ -17,12 +17,6 @@ var (
 	cfg               = &config.Config{OnsDomain: onsHost}
 	pageIsUseful      = true
 	isGeneralFeedback = true
-	unsafeHTML        = `<script>document.getElementById("demo").innerHTML = "Hello JavaScript!";</script>`
-	sanitizedHTML     = `&lt;script&gt;document.getElementById(&#34;demo&#34;).innerHTML = &#34;Hello JavaScript!&#34;;&lt;/script&gt;`
-	unsafeSQL         = `TODO`
-	sanitizedSQL      = `TODO`
-	unsafeNoSQL       = `TODO`
-	sanitizedNoSQL    = `TODO`
 )
 
 func validFeedbackModel() *models.Feedback {
@@ -111,19 +105,18 @@ func TestValidate(t *testing.T) {
 func TestFeedbackSanitize(t *testing.T) {
 
 	Convey("Given a Feedback model where all strings are unsafe", t, func() {
-
 		f := validFeedbackModel()
-		f.OnsURL = unsafeHTML
-		f.Feedback = unsafeHTML
-		f.Name = unsafeHTML
-		f.EmailAddress = unsafeHTML
+		f.OnsURL = unsafeStr
+		f.Feedback = unsafeStr
+		f.Name = unsafeStr
+		f.EmailAddress = unsafeStr
 
 		Convey("Then sanitize mutates the model accordingly", func() {
 			expected := validFeedbackModel()
-			expected.OnsURL = sanitizedHTML
-			expected.Feedback = sanitizedHTML
-			expected.Name = sanitizedHTML
-			expected.EmailAddress = sanitizedHTML
+			expected.OnsURL = sanitizedStr
+			expected.Feedback = sanitizedStr
+			expected.Name = sanitizedStr
+			expected.EmailAddress = sanitizedStr
 
 			f.Sanitize()
 			So(f, ShouldResemble, expected)

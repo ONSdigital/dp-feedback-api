@@ -11,6 +11,7 @@ import (
 	"github.com/ONSdigital/dp-feedback-api/api"
 	"github.com/ONSdigital/dp-feedback-api/api/mock"
 	"github.com/ONSdigital/dp-feedback-api/config"
+	"github.com/ONSdigital/dp-feedback-api/models"
 	"github.com/go-chi/chi/v5"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -32,6 +33,8 @@ var (
 		"name": "Mr Feedback reporter",
 		"email_address": "feedback@reporter.com"
 	}`
+	isPageUseful      = true
+	isGeneralFeedback = false
 )
 
 var expectedEmail = `From: sender@mail.com
@@ -46,6 +49,19 @@ Name: Mr Feedback reporter
 Email address: feedback@reporter.com
 `
 
+func testFeedback() *models.Feedback {
+	return &models.Feedback{
+		IsPageUseful:      &isPageUseful,
+		IsGeneralFeedback: &isGeneralFeedback,
+		OnsURL:            "https://testhost:1234/sub/path",
+		Feedback:          "very nice and useful website!",
+		Name:              "Mr Feedback reporter",
+		EmailAddress:      "feedback@reporter.com",
+	}
+}
+
+// TestPostFeedbackHandler - this tests the full handler
+// TODO this may be removed according to the task requirements, and implemented as component tasks
 func TestPostFeedbackHandler(t *testing.T) {
 
 	var sendOK = func(from string, to []string, msg []byte) error {
@@ -133,5 +149,13 @@ func TestPostFeedbackHandler(t *testing.T) {
 				So(resp.Code, ShouldEqual, http.StatusBadRequest)
 			})
 		})
+	})
+}
+
+func TestGenerateFeedbackMessage(t *testing.T) {
+	Convey("The expected email is generated from a valid feedback model", t, func() {
+		f := testFeedback()
+		generated := api.GenerateFeedbackMessage(f, "sender@mail.com", "receiver@mail.com")
+		So(string(generated), ShouldEqual, expectedEmail)
 	})
 }
