@@ -20,7 +20,6 @@ require (
 	github.com/ONSdigital/dp-api-clients-go v1.43.0 // indirect
 	github.com/ONSdigital/dp-mongodb-in-memory v1.5.0 // indirect
 	github.com/ONSdigital/dp-net v1.5.0 // indirect
-	github.com/aws/aws-sdk-go v1.44.76 // indirect
 	github.com/chromedp/cdproto v0.0.0-20211126220118-81fa0469ad77 // indirect
 	github.com/chromedp/chromedp v0.7.6 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
@@ -35,12 +34,10 @@ require (
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
-	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/go-memdb v1.3.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/jtolds/gls v4.20.0+incompatible // indirect
 	github.com/justinas/alice v1.2.0 // indirect
