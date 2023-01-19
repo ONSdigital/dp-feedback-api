@@ -14,6 +14,8 @@ type Config struct {
 	HealthCheckCriticalTimeout time.Duration `envconfig:"HEALTHCHECK_CRITICAL_TIMEOUT"`
 	OnsDomain                  string        `envconfig:"ONS_DOMAIN"`
 	ServiceAuthToken           string        `envconfig:"SERVICE_AUTH_TOKEN"             json:"-"`
+	FeedbackTo                 string        `envconfig:"FEEDBACK_TO"`
+	FeedbackFrom               string        `envconfig:"FEEDBACK_FROM"`
 	Mail                       *Mail
 	Sanitize                   *Sanitize
 }
@@ -24,8 +26,6 @@ type Mail struct {
 	User     string `envconfig:"MAIL_USER"`
 	Password string `envconfig:"MAIL_PASSWORD" json:"-"`
 	Port     string `envconfig:"MAIL_PORT"`
-	To       string `envconfig:"MAIL_TO"`
-	From     string `envconfig:"MAIL_FROM"`
 }
 
 // Sanitize represents the subset of configuration corresponding to the input string sanitization
@@ -50,7 +50,7 @@ func Get() (*Config, error) {
 		HealthCheckInterval:        30 * time.Second,
 		HealthCheckCriticalTimeout: 90 * time.Second,
 		OnsDomain:                  "localhost",
-		ServiceAuthToken:           "",
+		ServiceAuthToken:           "beehai7aeFoh4re8HaepaiFiwae9UXa6eeteimeil0ieyooyo5HohVoos2ahfeuw",
 		Mail: &Mail{
 			Host:     "localhost",
 			Port:     "1025",

@@ -19,11 +19,9 @@ import (
 var (
 	ctx = context.Background()
 	cfg = &config.Config{
-		OnsDomain: "testhost",
-		Mail: &config.Mail{
-			From: "sender@mail.com",
-			To:   "receiver@mail.com",
-		},
+		OnsDomain:    "testhost",
+		FeedbackFrom: "sender@mail.com",
+		FeedbackTo:   "receiver@mail.com",
 		Sanitize: &config.Sanitize{
 			HTML:  true,
 			SQL:   true,
@@ -102,8 +100,8 @@ func TestPostFeedbackHandler(t *testing.T) {
 
 				Convey("Then the expected email is sent", func() {
 					So(emailSenderMock.SendCalls(), ShouldHaveLength, 1)
-					So(emailSenderMock.SendCalls()[0].From, ShouldEqual, cfg.Mail.From)
-					So(emailSenderMock.SendCalls()[0].To, ShouldResemble, []string{cfg.Mail.To})
+					So(emailSenderMock.SendCalls()[0].From, ShouldEqual, cfg.FeedbackFrom)
+					So(emailSenderMock.SendCalls()[0].To, ShouldResemble, []string{cfg.FeedbackTo})
 					So(string(emailSenderMock.SendCalls()[0].Msg), ShouldEqual, expectedEmail)
 				})
 			})

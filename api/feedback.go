@@ -27,9 +27,9 @@ func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 	feedback.Sanitize(api.Cfg.Sanitize)
 
 	if err := api.EmailSender.Send(
-		api.Cfg.Mail.From,
-		[]string{api.Cfg.Mail.To},
-		GenerateFeedbackMessage(feedback, api.Cfg.Mail.From, api.Cfg.Mail.To),
+		api.Cfg.FeedbackFrom,
+		[]string{api.Cfg.FeedbackTo},
+		GenerateFeedbackMessage(feedback, api.Cfg.FeedbackFrom, api.Cfg.FeedbackTo),
 	); err != nil {
 		api.handleError(ctx, w, fmt.Errorf("failed to send message: %w", err), http.StatusInternalServerError)
 		return
