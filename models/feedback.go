@@ -47,9 +47,9 @@ func (f *Feedback) Validate(cfg *config.Config) error {
 	return nil
 }
 
-func (f *Feedback) Sanitize() {
-	f.OnsURL = Sanitize(f.OnsURL)
-	f.Feedback = Sanitize(f.Feedback)
-	f.Name = Sanitize(f.Name)
-	f.EmailAddress = Sanitize(f.EmailAddress)
+func (f *Feedback) Sanitize(cfg *config.Sanitize) {
+	f.OnsURL = Sanitize(cfg, f.OnsURL)
+	f.Feedback = Sanitize(cfg, f.Feedback)
+	f.Name = Sanitize(cfg, f.Name)
+	f.EmailAddress = Sanitize(cfg, f.EmailAddress)
 }

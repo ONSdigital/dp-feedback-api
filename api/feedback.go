@@ -24,7 +24,7 @@ func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	feedback.Sanitize()
+	feedback.Sanitize(api.Cfg.Sanitize)
 
 	if err := api.EmailSender.Send(
 		api.Cfg.Mail.From,

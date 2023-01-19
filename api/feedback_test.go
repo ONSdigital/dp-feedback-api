@@ -24,6 +24,11 @@ var (
 			From: "sender@mail.com",
 			To:   "receiver@mail.com",
 		},
+		Sanitize: &config.Sanitize{
+			HTML:  true,
+			SQL:   true,
+			NoSQL: true,
+		},
 	}
 	feedbackPayload = `{
 		"is_page_useful": true,

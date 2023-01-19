@@ -15,9 +15,10 @@ type Config struct {
 	OnsDomain                  string        `envconfig:"ONS_DOMAIN"`
 	ZebedeeURL                 string        `envconfig:"ZEBEDEE_URL"`
 	Mail                       *Mail
+	Sanitize                   *Sanitize
 }
 
-// MailConfig represents the subset of configuration corresponding to the email service
+// Mail represents the subset of configuration corresponding to the email service
 type Mail struct {
 	Host     string `envconfig:"MAIL_HOST"`
 	User     string `envconfig:"MAIL_USER"`
@@ -25,6 +26,13 @@ type Mail struct {
 	Port     string `envconfig:"MAIL_PORT"`
 	To       string `envconfig:"MAIL_TO"`
 	From     string `envconfig:"MAIL_FROM"`
+}
+
+// Sanitize represents the subset of configuration corresponding to the input string sanitization
+type Sanitize struct {
+	HTML  bool `envconfig:"SANITIZE_HTML"`
+	SQL   bool `envconfig:"SANITIZE_SQL"`
+	NoSQL bool `envconfig:"SANITIZE_NO_SQL"`
 }
 
 var cfg *Config
@@ -48,6 +56,11 @@ func Get() (*Config, error) {
 			Port:     "1025",
 			User:     "",
 			Password: "",
+		},
+		Sanitize: &Sanitize{
+			HTML:  true,
+			SQL:   true,
+			NoSQL: true,
 		},
 	}
 

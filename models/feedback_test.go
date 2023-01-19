@@ -111,14 +111,37 @@ func TestFeedbackSanitize(t *testing.T) {
 		f.Name = unsafeStr
 		f.EmailAddress = unsafeStr
 
-		Convey("Then sanitize mutates the model accordingly", func() {
+		Convey("Then sanitize with the config enabled mutates the model accordingly", func() {
+			cfg := &config.Sanitize{
+				HTML:  true,
+				SQL:   true,
+				NoSQL: true,
+			}
+
 			expected := validFeedbackModel()
 			expected.OnsURL = sanitizedStr
 			expected.Feedback = sanitizedStr
 			expected.Name = sanitizedStr
 			expected.EmailAddress = sanitizedStr
 
-			f.Sanitize()
+			f.Sanitize(cfg)
+			So(f, ShouldResemble, expected)
+		})
+
+		Convey("Then sanitize with the config disabled does not mutate the model", func() {
+			cfg := &config.Sanitize{
+				HTML:  false,
+				SQL:   false,
+				NoSQL: false,
+			}
+
+			expected := validFeedbackModel()
+			expected.OnsURL = unsafeStr
+			expected.Feedback = unsafeStr
+			expected.Name = unsafeStr
+			expected.EmailAddress = unsafeStr
+
+			f.Sanitize(cfg)
 			So(f, ShouldResemble, expected)
 		})
 	})

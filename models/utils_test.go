@@ -3,19 +3,83 @@ package models_test
 import (
 	"testing"
 
+	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/dp-feedback-api/models"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 var (
-	unsafeStr    = `<script>document.getElementById("$demo").innerHTML = "Hello JavaScript!";</script>`
-	sanitizedStr = `&lt;script&gt;document.getElementById(\&#34;\\$demo\&#34;).innerHTML = \&#34;Hello JavaScript!\&#34;;&lt;/script&gt;`
+	unsafeStr         = `<script>document.getElementById("$demo").innerHTML = "Hello JavaScript!";</script>`
+	sanitizedStr      = `&lt;script&gt;document.getElementById(\&#34;\\$demo\&#34;).innerHTML = \&#34;Hello JavaScript!\&#34;;&lt;/script&gt;`
+	htmlSanitizedStr  = `&lt;script&gt;document.getElementById(&#34;$demo&#34;).innerHTML = &#34;Hello JavaScript!&#34;;&lt;/script&gt;`
+	sqlSanitizedStr   = `<script>document.getElementById(\"$demo\").innerHTML = \"Hello JavaScript!\";</script>`
+	nosqlSanitizedStr = `<script>document.getElementById("\$demo").innerHTML = "Hello JavaScript!";</script>`
 )
 
 func TestSanitize(t *testing.T) {
-	Convey("strings are correctly sanitized", t, func() {
-		s := models.Sanitize(unsafeStr)
-		So(s, ShouldEqual, sanitizedStr)
+	Convey("given a fully disabled sanitize config", t, func() {
+		cfg := &config.Sanitize{
+			HTML:  false,
+			SQL:   false,
+			NoSQL: false,
+		}
+
+		Convey("Then no sanitization is performed", func() {
+			s := models.Sanitize(cfg, unsafeStr)
+			So(s, ShouldEqual, unsafeStr)
+		})
+	})
+
+	Convey("given a fully enabled sanitize config", t, func() {
+		cfg := &config.Sanitize{
+			HTML:  true,
+			SQL:   true,
+			NoSQL: true,
+		}
+
+		Convey("Then a full sanitization is performed", func() {
+			s := models.Sanitize(cfg, unsafeStr)
+			So(s, ShouldEqual, sanitizedStr)
+		})
+	})
+
+	Convey("given an html-only sanitize config", t, func() {
+		cfg := &config.Sanitize{
+			HTML:  true,
+			SQL:   false,
+			NoSQL: false,
+		}
+
+		Convey("Then an html-only sanitization is performed", func() {
+			s := models.Sanitize(cfg, unsafeStr)
+			So(s, ShouldEqual, htmlSanitizedStr)
+		})
+	})
+
+	Convey("given a sql-only sanitize config", t, func() {
+		cfg := &config.Sanitize{
+			HTML:  false,
+			SQL:   true,
+			NoSQL: false,
+		}
+
+		Convey("Then a sql-only sanitization is performed", func() {
+			s := models.Sanitize(cfg, unsafeStr)
+			So(s, ShouldEqual, sqlSanitizedStr)
+		})
+	})
+
+	Convey("given a nosql-only sanitize config", t, func() {
+		cfg := &config.Sanitize{
+			HTML:  false,
+			SQL:   false,
+			NoSQL: true,
+		}
+
+		Convey("Then a nosql-only sanitization is performed", func() {
+			s := models.Sanitize(cfg, unsafeStr)
+			So(s, ShouldEqual, nosqlSanitizedStr)
+		})
 	})
 }
 

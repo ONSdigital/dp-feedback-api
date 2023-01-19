@@ -3,15 +3,23 @@ package models
 import (
 	"html"
 	"strings"
+
+	"github.com/ONSdigital/dp-feedback-api/config"
 )
 
 // Sanitize sanitizes the input string to prevent html, mysql and nosql (mongodb only) injection attacks
-func Sanitize(toSanitize string) string {
-	return html.EscapeString(
-		MysqlRealEscapeString(
-			MongodbEscapeString(toSanitize),
-		),
-	)
+func Sanitize(cfg *config.Sanitize, toSanitize string) string {
+	s := toSanitize
+	if cfg.NoSQL {
+		s = MongodbEscapeString(s)
+	}
+	if cfg.SQL {
+		s = MysqlRealEscapeString(s)
+	}
+	if cfg.HTML {
+		s = html.EscapeString(s)
+	}
+	return s
 }
 
 // MysqlRealEscapeString escapes the control characters used by sql commands

@@ -33,6 +33,11 @@ func TestConfig(t *testing.T) {
 						User:     "",
 						Password: "",
 					},
+					Sanitize: &Sanitize{
+						HTML:  true,
+						SQL:   true,
+						NoSQL: true,
+					},
 				})
 			})
 			Convey("Then a second call to config should return the same config", func() {
