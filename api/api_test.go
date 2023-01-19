@@ -21,7 +21,7 @@ func TestSetup(t *testing.T) {
 		cfg := &config.Config{
 			OnsDomain: "localhost",
 		}
-		a := api.Setup(ctx, cfg, r, nil, nil)
+		a := api.Setup(ctx, cfg, r, nil)
 
 		Convey("When created the following routes should have been added", func() {
 			So(hasRoute(a.Router, "/feedback", http.MethodPost), ShouldBeTrue)

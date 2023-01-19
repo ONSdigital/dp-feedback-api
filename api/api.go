@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/ONSdigital/dp-api-clients-go/v2/identity"
 	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/dp-feedback-api/middleware"
 	"github.com/ONSdigital/log.go/v2/log"
@@ -16,19 +15,17 @@ import (
 
 // API provides a struct to wrap the api around
 type API struct {
-	Cfg            *config.Config
-	Router         chi.Router
-	IdentityClient *identity.Client
-	EmailSender    EmailSender
+	Cfg         *config.Config
+	Router      chi.Router
+	EmailSender EmailSender
 }
 
 // Setup function sets up the api and returns an api
-func Setup(ctx context.Context, cfg *config.Config, r chi.Router, idc *identity.Client, e EmailSender) *API {
+func Setup(ctx context.Context, cfg *config.Config, r chi.Router, e EmailSender) *API {
 	api := &API{
-		Cfg:            cfg,
-		Router:         r,
-		IdentityClient: idc,
-		EmailSender:    e,
+		Cfg:         cfg,
+		Router:      r,
+		EmailSender: e,
 	}
 
 	api.mountEndpoints(ctx)
@@ -40,7 +37,7 @@ func Setup(ctx context.Context, cfg *config.Config, r chi.Router, idc *identity.
 // and then mounts it to the existing router, in order to prevent existing endpoints (i.e. /health) to go through auth.
 func (api *API) mountEndpoints(ctx context.Context) {
 	r := chi.NewRouter()
-	middleware.UseAuth(r, api.IdentityClient)
+	middleware.Setup(r, api.Cfg.ServiceAuthToken)
 
 	// TODO: remove hello world example handler route when component tests are no longer using it
 	r.Get("/hello", HelloHandler(ctx))

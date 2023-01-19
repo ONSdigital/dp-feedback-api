@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ONSdigital/dp-api-clients-go/v2/identity"
 	"github.com/ONSdigital/dp-feedback-api/api"
 	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/log.go/v2/log"
@@ -15,12 +14,11 @@ import (
 
 // Service contains all the configs, server and clients to run the API
 type Service struct {
-	Config         *config.Config
-	Server         HTTPServer
-	API            *api.API
-	IdentityClient *identity.Client
-	EmailSender    EmailSender
-	HealthCheck    HealthChecker
+	Config      *config.Config
+	Server      HTTPServer
+	API         *api.API
+	EmailSender EmailSender
+	HealthCheck HealthChecker
 }
 
 func New() *Service {
@@ -36,9 +34,6 @@ func (svc *Service) Init(ctx context.Context, cfg *config.Config, buildTime, git
 		return errors.New("nil config passed to service init")
 	}
 	svc.Config = cfg
-
-	// Get identity client
-	svc.IdentityClient = GetIdentityClient(cfg.ZebedeeURL)
 
 	// Get Email Sender
 	svc.EmailSender = GetEmailSender(cfg.Mail)
@@ -57,7 +52,7 @@ func (svc *Service) Init(ctx context.Context, cfg *config.Config, buildTime, git
 	svc.Server = GetHTTPServer(cfg.BindAddr, r)
 
 	// Create API
-	svc.API = api.Setup(ctx, cfg, r, svc.IdentityClient, svc.EmailSender)
+	svc.API = api.Setup(ctx, cfg, r, svc.EmailSender)
 	return nil
 }
 
@@ -128,10 +123,6 @@ func (svc *Service) Close(ctx context.Context) error {
 func (svc *Service) registerCheckers(ctx context.Context) (err error) {
 	if svc.HealthCheck == nil {
 		return errors.New("healthcheck must be created before registering checkers")
-	}
-
-	if err := svc.HealthCheck.AddCheck("Zebedee", svc.IdentityClient.Checker); err != nil {
-		return fmt.Errorf("error adding check for datastore: %w", err)
 	}
 
 	return nil

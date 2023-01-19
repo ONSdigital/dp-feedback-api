@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ONSdigital/dp-api-clients-go/v2/identity"
 	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/dp-feedback-api/email"
 
@@ -32,10 +31,6 @@ var GetHealthCheck = func(cfg *config.Config, buildTime, gitCommit, version stri
 		cfg.HealthCheckInterval,
 	)
 	return &hc, nil
-}
-
-var GetIdentityClient = func(zebedeeURL string) *identity.Client {
-	return identity.New(zebedeeURL)
 }
 
 // GetEmailSender creates an email sender using the email package

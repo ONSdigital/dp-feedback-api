@@ -13,7 +13,7 @@ type Config struct {
 	HealthCheckInterval        time.Duration `envconfig:"HEALTHCHECK_INTERVAL"`
 	HealthCheckCriticalTimeout time.Duration `envconfig:"HEALTHCHECK_CRITICAL_TIMEOUT"`
 	OnsDomain                  string        `envconfig:"ONS_DOMAIN"`
-	ZebedeeURL                 string        `envconfig:"ZEBEDEE_URL"`
+	ServiceAuthToken           string        `envconfig:"SERVICE_AUTH_TOKEN"             json:"-"`
 	Mail                       *Mail
 	Sanitize                   *Sanitize
 }
@@ -50,7 +50,7 @@ func Get() (*Config, error) {
 		HealthCheckInterval:        30 * time.Second,
 		HealthCheckCriticalTimeout: 90 * time.Second,
 		OnsDomain:                  "localhost",
-		ZebedeeURL:                 "http://localhost:8082",
+		ServiceAuthToken:           "",
 		Mail: &Mail{
 			Host:     "localhost",
 			Port:     "1025",
