@@ -2,7 +2,6 @@ package models_test
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"testing"
 
@@ -34,7 +33,7 @@ func TestValidate(t *testing.T) {
 	Convey("Given a valid fully populated Feedback model", t, func() {
 		f := validFeedbackModel()
 
-		Convey("Then the validation is successful", func() {
+		Convey("Then validation is successful", func() {
 			So(f.Validate(cfg), ShouldBeNil)
 		})
 	})
@@ -45,7 +44,7 @@ func TestValidate(t *testing.T) {
 			IsGeneralFeedback: &isGeneralFeedback,
 		}
 
-		Convey("Then the validation is successful", func() {
+		Convey("Then validation is successful", func() {
 			So(f.Validate(cfg), ShouldBeNil)
 		})
 	})
@@ -55,7 +54,9 @@ func TestValidate(t *testing.T) {
 		f.IsPageUseful = nil
 
 		Convey("Then the validation fails with the expected error", func() {
-			So(f.Validate(cfg), ShouldResemble, errors.New("is_page_useful is compulsory"))
+			err := f.Validate(cfg)
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "Key: 'Feedback.IsPageUseful' Error:Field validation for 'IsPageUseful' failed on the 'required' tag")
 		})
 	})
 
@@ -64,7 +65,9 @@ func TestValidate(t *testing.T) {
 		f.IsGeneralFeedback = nil
 
 		Convey("Then the validation fails with the expected error", func() {
-			So(f.Validate(cfg), ShouldResemble, errors.New("is_general_feedback is compulsory"))
+			err := f.Validate(cfg)
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "Key: 'Feedback.IsGeneralFeedback' Error:Field validation for 'IsGeneralFeedback' failed on the 'required' tag")
 		})
 	})
 
@@ -75,7 +78,7 @@ func TestValidate(t *testing.T) {
 		Convey("Then the validation fails with the expected error", func() {
 			err := f.Validate(cfg)
 			So(err, ShouldNotBeNil)
-			So(err.Error(), ShouldEqual, "invalid email address: mail: missing '@' or angle-addr")
+			So(err.Error(), ShouldEqual, "Key: 'Feedback.EmailAddress' Error:Field validation for 'EmailAddress' failed on the 'email' tag")
 		})
 	})
 
@@ -86,7 +89,7 @@ func TestValidate(t *testing.T) {
 		Convey("Then the validation fails with the expected error", func() {
 			err := f.Validate(cfg)
 			So(err, ShouldNotBeNil)
-			So(err.Error(), ShouldEqual, `invalid ons url: parse "£@%": invalid URL escape "%"`)
+			So(err.Error(), ShouldEqual, "Key: 'Feedback.OnsURL' Error:Field validation for 'OnsURL' failed on the 'ons_url' tag")
 		})
 	})
 
@@ -97,7 +100,7 @@ func TestValidate(t *testing.T) {
 		Convey("Then the validation fails with the expected error", func() {
 			err := f.Validate(cfg)
 			So(err, ShouldNotBeNil)
-			So(err.Error(), ShouldEqual, "unexpected ons domain name: attackerHost")
+			So(err.Error(), ShouldEqual, "Key: 'Feedback.OnsURL' Error:Field validation for 'OnsURL' failed on the 'ons_url' tag")
 		})
 	})
 }
