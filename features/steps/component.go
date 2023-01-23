@@ -21,12 +21,13 @@ var (
 
 type Component struct {
 	componenttest.ErrorFeature
-	svc            *service.Service
-	errorChan      chan error
-	Config         *config.Config
-	HTTPServer     *http.Server
-	ServiceRunning bool
-	apiFeature     *componenttest.APIFeature
+	svc             *service.Service
+	errorChan       chan error
+	Config          *config.Config
+	HTTPServer      *http.Server
+	EmailSenderMock *mock.EmailSenderMock
+	ServiceRunning  bool
+	apiFeature      *componenttest.APIFeature
 }
 
 func NewComponent() (*Component, error) {
@@ -38,6 +39,9 @@ func NewComponent() (*Component, error) {
 
 	var err error
 	c.Config, err = config.Get()
+	c.Config.ServiceAuthToken = "bearer SomeFakeToken" // As defined in "IAmAuthorised" APIFeature func in dp-component-test
+	c.Config.FeedbackFrom = "sender@feedback.com"
+	c.Config.FeedbackTo = "receiver@feedback.com"
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +83,13 @@ func (c *Component) setInitialiserMock() {
 		return &http.Server{Addr: bindAddr, Handler: router}
 	}
 
+	c.EmailSenderMock = &mock.EmailSenderMock{
+		SendFunc: func(from string, to []string, msg []byte) error {
+			return nil
+		},
+	}
 	service.GetEmailSender = func(*config.Mail) service.EmailSender {
-		return &mock.EmailSenderMock{}
+		return c.EmailSenderMock
 	}
 }
 

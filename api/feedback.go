@@ -47,8 +47,14 @@ func GenerateFeedbackMessage(f *models.Feedback, from, to string) []byte {
 
 	b.WriteString(fmt.Sprintf("Is page useful: %t\n", *f.IsPageUseful))
 	b.WriteString(fmt.Sprintf("Is general feedback: %t\n", *f.IsGeneralFeedback))
-	b.WriteString(fmt.Sprintf("Page URL: %s\n", f.OnsURL))
-	b.WriteString(fmt.Sprintf("Description: %s\n", f.Feedback))
+
+	if len(f.OnsURL) > 0 {
+		b.WriteString(fmt.Sprintf("Page URL: %s\n", f.OnsURL))
+	}
+
+	if len(f.Feedback) > 0 {
+		b.WriteString(fmt.Sprintf("Description: %s\n", f.Feedback))
+	}
 
 	if len(f.Name) > 0 {
 		b.WriteString(fmt.Sprintf("Name: %s\n", f.Name))

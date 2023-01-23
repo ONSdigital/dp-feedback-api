@@ -39,8 +39,6 @@ func (api *API) mountEndpoints(ctx context.Context) {
 	r := chi.NewRouter()
 	middleware.Setup(r, api.Cfg.ServiceAuthToken)
 
-	// TODO: remove hello world example handler route when component tests are no longer using it
-	r.Get("/hello", HelloHandler(ctx))
 	r.Post("/feedback", api.PostFeedback)
 
 	api.Router.Mount("/", r)
