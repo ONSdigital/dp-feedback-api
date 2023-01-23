@@ -17,16 +17,16 @@ Feature: Feedback
     Then I should receive a 201 status code with an empty body response
     And The following email is sent
       """
-	    	From: sender@feedback.com
-	     	To: receiver@feedback.com
-	    	Subject: Feedback received
-	      
-	      Is page useful: true
-	      Is general feedback: false
-	      Page URL: https://localhost/subpath/one
-	      Description: very nice and useful website!
-	      Name: Mr Reporter
-	      Email address: feedback@reporter.com
+        From: sender@feedback.com
+        To: receiver@feedback.com
+        Subject: Feedback received
+
+        Is page useful: true
+        Is general feedback: false
+        Page URL: https://localhost/subpath/one
+        Description: very nice and useful website!
+        Name: Mr Reporter
+        Email address: feedback@reporter.com
       """
 
 
@@ -42,12 +42,12 @@ Feature: Feedback
     Then I should receive a 201 status code with an empty body response
     And The following email is sent
       """
-	    	From: sender@feedback.com
-	     	To: receiver@feedback.com
-	    	Subject: Feedback received
-	      
-	      Is page useful: true
-	      Is general feedback: false
+        From: sender@feedback.com
+        To: receiver@feedback.com
+        Subject: Feedback received
+
+        Is page useful: true
+        Is general feedback: false
       """
 
 
@@ -119,12 +119,12 @@ Feature: Feedback
     Then I should receive a 201 status code with an empty body response
     And The following email is sent
       """
-	    	From: sender@feedback.com
-	     	To: receiver@feedback.com
-	    	Subject: Feedback received
-	      
-	      Is page useful: true
-	      Is general feedback: true
-	      Page URL: https://localhost/subpath/one
-	      Description: &lt;script&gt;document.getElementById(\&#39;demo\&#39;).innerHTML = \&#39;Hello JavaScript!\&#39;\&#39;;&lt;/script&gt;
+        From: sender@feedback.com
+        To: receiver@feedback.com
+        Subject: Feedback received
+
+        Is page useful: true
+        Is general feedback: true
+        Page URL: https://localhost/subpath/one
+        Description: &lt;script&gt;document.getElementById(\&#39;demo\&#39;).innerHTML = \&#39;Hello JavaScript!\&#39;\&#39;;&lt;/script&gt;
       """
