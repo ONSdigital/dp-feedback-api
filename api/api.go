@@ -59,22 +59,6 @@ func Unmarshal(body io.ReadCloser, v interface{}) error {
 	return nil
 }
 
-// WriteJSON responds generates
-func (api *API) WriteJSON(ctx context.Context, w http.ResponseWriter, status int, resp interface{}) error {
-	b, err := json.Marshal(resp)
-	if err != nil {
-		return fmt.Errorf("failed to marshal response: %w", err)
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(status)
-
-	if _, err = w.Write(b); err != nil {
-		return fmt.Errorf("failed to write response: %w", err)
-	}
-	return nil
-}
-
 func (api *API) handleError(ctx context.Context, w http.ResponseWriter, err error, status int) {
 	log.Error(ctx, "request failed", err)
 	http.Error(w, err.Error(), status)
