@@ -25,6 +25,19 @@ func TestConfig(t *testing.T) {
 					GracefulShutdownTimeout:    5 * time.Second,
 					HealthCheckInterval:        30 * time.Second,
 					HealthCheckCriticalTimeout: 90 * time.Second,
+					OnsDomain:                  "localhost",
+					ServiceAuthToken:           "beehai7aeFoh4re8HaepaiFiwae9UXa6eeteimeil0ieyooyo5HohVoos2ahfeuw",
+					Mail: &Mail{
+						Host:     "localhost",
+						Port:     "1025",
+						User:     "",
+						Password: "",
+					},
+					Sanitize: &Sanitize{
+						HTML:  true,
+						SQL:   true,
+						NoSQL: true,
+					},
 				})
 			})
 			Convey("Then a second call to config should return the same config", func() {

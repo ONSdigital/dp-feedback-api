@@ -4,19 +4,12 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/dp-healthcheck/healthcheck"
 )
 
-//go:generate moq -out mock/initialiser.go -pkg mock . Initialiser
 //go:generate moq -out mock/server.go -pkg mock . HTTPServer
 //go:generate moq -out mock/healthCheck.go -pkg mock . HealthChecker
-
-// Initialiser defines the methods to initialise external services
-type Initialiser interface {
-	DoGetHTTPServer(bindAddr string, router http.Handler) HTTPServer
-	DoGetHealthCheck(cfg *config.Config, buildTime, gitCommit, version string) (HealthChecker, error)
-}
+//go:generate moq -out mock/email.go -pkg mock . EmailSender
 
 // HTTPServer defines the required methods from the HTTP server
 type HTTPServer interface {
@@ -30,4 +23,9 @@ type HealthChecker interface {
 	Start(ctx context.Context)
 	Stop()
 	AddCheck(name string, checker healthcheck.Checker) (err error)
+}
+
+// EmailSender defines the required methods to send emails
+type EmailSender interface {
+	Send(from string, to []string, msg []byte) error
 }

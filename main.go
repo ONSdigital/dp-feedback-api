@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 
@@ -42,30 +43,35 @@ func main() {
 func run(ctx context.Context) error {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, os.Kill)
-
-	// Run the service, providing an error channel for fatal errors
 	svcErrors := make(chan error, 1)
-	svcList := service.NewServiceList(&service.Init{})
-
-	log.Info(ctx, "dp-feedback-api version", log.Data{"version": Version})
 
 	// Read config
 	cfg, err := config.Get()
 	if err != nil {
 		return errors.Wrap(err, "error getting configuration")
 	}
+	log.Info(ctx, "config on startup", log.Data{"config": cfg, "build_time": BuildTime, "git-commit": GitCommit})
 
-	// Start service
-	svc, err := service.Run(ctx, cfg, svcList, BuildTime, GitCommit, Version, svcErrors)
-	if err != nil {
+	// Make sure that context is cancelled when 'run' finishes its execution.
+	// Any remaining go-routine that was not terminated during svc.Close (graceful shutdown) will be terminated by ctx.Done()
+	var cancel context.CancelFunc
+	ctx, cancel = context.WithCancel(ctx)
+	defer cancel()
+
+	// Run the service
+	svc := service.New()
+	if err := svc.Init(ctx, cfg, BuildTime, GitCommit, Version); err != nil {
 		return errors.Wrap(err, "running service failed")
 	}
+	svc.Start(ctx, svcErrors)
 
 	// blocks until an os interrupt or a fatal error occurs
 	select {
 	case err := <-svcErrors:
-		// TODO: call svc.Close(ctx) (or something specific)
-		//  if there are any service connections like Kafka that you need to shut down
+		err = fmt.Errorf("service error received: %w", err)
+		if errClose := svc.Close(ctx); errClose != nil {
+			log.Error(ctx, "service close error during error handling", errClose)
+		}
 		return errors.Wrap(err, "service error received")
 	case sig := <-signals:
 		log.Info(ctx, "os signal received", log.Data{"signal": sig})
