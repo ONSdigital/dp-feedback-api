@@ -211,11 +211,11 @@ func getMockClient(host string, statusCode int, bodyStr string, doErr error) (*h
 	return healthcheck.NewClientWithClienter(sdk.Service, host, c), c
 }
 
-func getExampleFeedbackJson() []byte {
+func getExampleFeedbackJSON() []byte {
 	f := getExampleFeedback()
-	feedbackJson, err := json.Marshal(f)
+	feedbackJSON, err := json.Marshal(f)
 	So(err, ShouldBeNil)
-	return feedbackJson
+	return feedbackJSON
 }
 
 func getExampleFeedback() *models.Feedback {

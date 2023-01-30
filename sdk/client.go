@@ -73,8 +73,8 @@ func (cli *Client) Checker(ctx context.Context, check *health.CheckState) error 
 }
 
 // PostFeedback sends the provided feedback model to the feedback API via a post call
-func (c *Client) PostFeedback(ctx context.Context, feedback *models.Feedback, options Options) *sdkError.StatusError {
-	uri := fmt.Sprintf(FeedbackEndpoint, c.hcCli.URL)
+func (cli *Client) PostFeedback(ctx context.Context, feedback *models.Feedback, options Options) *sdkError.StatusError {
+	uri := fmt.Sprintf(FeedbackEndpoint, cli.hcCli.URL)
 
 	buf := &bytes.Buffer{}
 	err := json.NewEncoder(buf).Encode(feedback)
@@ -95,7 +95,7 @@ func (c *Client) PostFeedback(ctx context.Context, feedback *models.Feedback, op
 
 	options.SetAuth(req)
 
-	resp, err := c.hcCli.Client.Do(ctx, req)
+	resp, err := cli.hcCli.Client.Do(ctx, req)
 	if err != nil {
 		return &sdkError.StatusError{
 			Err:  fmt.Errorf("error sending request: %w", err),
