@@ -28,7 +28,7 @@ func (c *Component) iShouldReceiveAnEmptyResponse(code string) error {
 	)
 }
 
-func (c *Component) iShouldReceiveResponse(code string, documentJson *godog.DocString) error {
+func (c *Component) iShouldReceiveResponse(code string, documentJSON *godog.DocString) error {
 	// Validate status code
 	statusCode := c.apiFeature.HttpResponse.StatusCode
 	expectedCode, err := strconv.Atoi(code)
@@ -38,7 +38,7 @@ func (c *Component) iShouldReceiveResponse(code string, documentJson *godog.DocS
 	assert.Equal(c, expectedCode, statusCode)
 
 	// Validate body
-	var expectedBody = trimLines(documentJson.Content)
+	var expectedBody = trimLines(documentJSON.Content)
 	responseBody := c.apiFeature.HttpResponse.Body
 	body, err := io.ReadAll(responseBody)
 	if err != nil {
@@ -49,10 +49,10 @@ func (c *Component) iShouldReceiveResponse(code string, documentJson *godog.DocS
 	return c.StepError()
 }
 
-func (c *Component) theFollowingEmailIsSent(documentJson *godog.DocString) error {
+func (c *Component) theFollowingEmailIsSent(documentJSON *godog.DocString) error {
 	assert.Equal(c, len(c.EmailSenderMock.SendCalls()), 1)
 
-	var expectedEmail = trimLines(documentJson.Content)
+	var expectedEmail = trimLines(documentJSON.Content)
 	sentEmail := c.EmailSenderMock.SendCalls()[0].Msg
 	assert.Equal(c, expectedEmail, trimLines(string(sentEmail)))
 
