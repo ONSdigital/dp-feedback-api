@@ -1,7 +1,9 @@
 swagger: "2.0"
 info:
   title: "dp-feedback-api"
-  description: "This contains the code for the dp feedback api"
+  description: | 
+    This API is used to subimt feedback from other DP services for internal
+    distribution, analysis and action.
   version: 1.0.0
   license:
     name: "Open Government Licence v3.0"
@@ -10,25 +12,60 @@ basePath: "/v1"
 schemes:
   - http
 tags:
-  - name: "hello"
+  - name: "feedback"
   - name: "private"
+securityDefinitions:
+  InternalAPIKey:
+    name: internal-token
+    description: "API key used to allow only internal services to post feedback"
+    in: header
+    type: apiKey
+parameters:
+  feedback:
+    name: feedback
+    in: body
+    required: true
+    schema:
+      type: object
+      required: 
+        - is_page_useful
+        - is_general_feedback
+      properties:
+        is_page_useful:
+          type: boolean
+        is_general_feedback:
+          type: boolean
+        name:
+          type: string
+        email_address:
+          type: string
+        feedback:
+          type: string
+        ons_url:
+          type: string
+          description: "URL the feedback is received from"
 paths:
-  /hello:
-    get:
-      tags:
-        - hello
-      summary: Example hello world endpoint
-      description: Returns an example payload.
-      produces:
+  /feedback:
+    post:
+      consumes:
         - application/json
+      tags:
+        - feedback
+      summary: "Post feedback for distribution"
+      description: "Post feedback forms here for distribution and/or storage internally"
+      parameters:
+        - $ref: '#/parameters/feedback'
       responses:
-        200:
-          description: OK
-          schema:
-            $ref: "#/definitions/HelloResponse"
+        201:
+          description: "OK"
+        400:
+          $ref: '#/responses/InvalidRequestError'
+        401:
+          $ref: '#/responses/UnauthorisedError'
         500:
           $ref: '#/responses/InternalError'
-
+      security:
+        - InternalAPIKey: []
   /health:
     get:
       tags:
@@ -50,15 +87,12 @@ paths:
 responses:
   InternalError:
     description: "Failed to process the request due to an internal error"
+  InvalidRequestError:
+    description: "Failed to process the request due to an invalid request"
+  UnauthorisedError:
+    description: "Unauthorised to access resource"
 
 definitions:
-  HelloResponse:
-    type: object
-    properties:
-      message:
-        type: string
-        description: "Message returned by hello world endpoint"
-        example: "Hello, world!"
   Health:
     type: object
     properties:

@@ -9,7 +9,7 @@ import (
 )
 
 // PostFeedback is the handler for POST /feedback
-// It unmarshals and validates
+// It unmarshals and validates the feedback data before sending to configured email account
 func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
