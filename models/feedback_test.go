@@ -106,7 +106,6 @@ func TestValidate(t *testing.T) {
 }
 
 func TestFeedbackSanitize(t *testing.T) {
-
 	Convey("Given a Feedback model where all strings are unsafe", t, func() {
 		f := validFeedbackModel()
 		f.OnsURL = unsafeStr
