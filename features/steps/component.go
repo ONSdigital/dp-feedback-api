@@ -32,14 +32,13 @@ type Component struct {
 
 func NewComponent() (*Component, error) {
 	c := &Component{
-		HTTPServer:     &http.Server{},
+		HTTPServer:     &http.Server{}, //nolint:gosec //Not live code
 		errorChan:      make(chan error),
 		ServiceRunning: false,
 	}
 
 	var err error
 	c.Config, err = config.Get()
-	c.Config.ServiceAuthToken = "bearer SomeFakeToken" // As defined in "IAmAuthorised" APIFeature func in dp-component-test
 	c.Config.FeedbackFrom = "sender@feedback.com"
 	c.Config.FeedbackTo = "receiver@feedback.com"
 	if err != nil {
@@ -80,7 +79,7 @@ func (c *Component) Close() error {
 
 func (c *Component) setInitialiserMock() {
 	service.GetHTTPServer = func(bindAddr string, router http.Handler) service.HTTPServer {
-		return &http.Server{Addr: bindAddr, Handler: router}
+		return &http.Server{Addr: bindAddr, Handler: router} //nolint:gosec //Not live code
 	}
 
 	c.EmailSenderMock = &mock.EmailSenderMock{

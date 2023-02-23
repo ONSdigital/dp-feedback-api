@@ -51,26 +51,6 @@ Feature: Feedback
       """
 
 
-  Scenario: Posting unauthorised
-    Given I am not authorised
-    When I POST "/feedback"
-      """
-        {
-          "is_page_useful": true,
-          "is_general_feedback": true,
-          "ons_url": "https://localhost/subpath/one",
-          "feedback": "very nice and useful website!",
-          "name": "Mr Reporter",
-          "email_address": "feedback@reporter.com"
-        }
-      """
-    Then I should receive a 401 status code with an the following body response
-      """
-        401 Unauthorized
-      """
-    And No email is sent
-
-
   Scenario: Posting feedback with the wrong domain in ons url
     Given I am authorised
     When I POST "/feedback"

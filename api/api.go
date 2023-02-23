@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/ONSdigital/dp-feedback-api/config"
-	"github.com/ONSdigital/dp-feedback-api/middleware"
 	"github.com/ONSdigital/log.go/v2/log"
 	"github.com/go-chi/chi/v5"
 )
@@ -37,10 +36,7 @@ func Setup(ctx context.Context, cfg *config.Config, r chi.Router, e EmailSender)
 // and then mounts it to the existing router, in order to prevent existing endpoints (i.e. /health) to go through auth.
 func (api *API) mountEndpoints(ctx context.Context) {
 	r := chi.NewRouter()
-	middleware.Setup(r, api.Cfg.ServiceAuthToken)
-
 	r.Post("/feedback", api.PostFeedback)
-
 	api.Router.Mount("/", r)
 }
 
