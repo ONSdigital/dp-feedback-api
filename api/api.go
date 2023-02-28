@@ -36,6 +36,10 @@ func Setup(ctx context.Context, cfg *config.Config, r chi.Router, e EmailSender)
 // and then mounts it to the existing router, in order to prevent existing endpoints (i.e. /health) to go through auth.
 func (api *API) mountEndpoints(ctx context.Context) {
 	r := chi.NewRouter()
+	r.Route(api.Cfg.VersionPrefix, func(r chi.Router) {
+		r.Post("/feedback", api.PostFeedback)
+	})
+
 	r.Post("/feedback", api.PostFeedback)
 	api.Router.Mount("/", r)
 }

@@ -26,6 +26,7 @@ func TestConfig(t *testing.T) {
 					HealthCheckInterval:        30 * time.Second,
 					HealthCheckCriticalTimeout: 90 * time.Second,
 					OnsDomain:                  "localhost",
+					VersionPrefix:              "/v1",
 					Mail: &Mail{
 						Host:     "localhost",
 						Port:     "1025",

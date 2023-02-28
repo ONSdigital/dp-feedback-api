@@ -19,12 +19,13 @@ func TestSetup(t *testing.T) {
 		r := chi.NewRouter()
 		ctx := context.Background()
 		cfg := &config.Config{
-			OnsDomain: "localhost",
+			OnsDomain:     "localhost",
+			VersionPrefix: "/v1",
 		}
 		a := api.Setup(ctx, cfg, r, nil)
 
 		Convey("When created the following routes should have been added", func() {
-			So(hasRoute(a.Router, "/feedback", http.MethodPost), ShouldBeTrue)
+			So(hasRoute(a.Router, cfg.VersionPrefix+"/feedback", http.MethodPost), ShouldBeTrue)
 		})
 	})
 }

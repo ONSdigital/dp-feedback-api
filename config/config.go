@@ -15,6 +15,7 @@ type Config struct {
 	OnsDomain                  string        `envconfig:"ONS_DOMAIN"`
 	FeedbackTo                 string        `envconfig:"FEEDBACK_TO"`
 	FeedbackFrom               string        `envconfig:"FEEDBACK_FROM"`
+	VersionPrefix              string        `envconfig:"VERSION_PREFIX"`
 	Mail                       *Mail
 	Sanitize                   *Sanitize
 }
@@ -49,6 +50,7 @@ func Get() (*Config, error) {
 		HealthCheckInterval:        30 * time.Second,
 		HealthCheckCriticalTimeout: 90 * time.Second,
 		OnsDomain:                  "localhost",
+		VersionPrefix:              "/v1",
 		Mail: &Mail{
 			Host:     "localhost",
 			Port:     "1025",
