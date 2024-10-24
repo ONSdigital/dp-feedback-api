@@ -27,11 +27,13 @@ func TestConfig(t *testing.T) {
 					HealthCheckCriticalTimeout: 90 * time.Second,
 					OnsDomain:                  "localhost",
 					VersionPrefix:              "/v1",
+					FeedbackTo:                 "to@gmail.com",
+					FeedbackFrom:               "from@gmail.com",
 					Mail: &Mail{
-						Host:     "localhost",
-						Port:     "1025",
-						User:     "",
-						Password: "",
+						MailHost:     "localhost",
+						MailPort:     "1025",
+						MailUser:     "",
+						MailPassword: "",
 					},
 					Sanitize: &Sanitize{
 						HTML:  true,
