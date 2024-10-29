@@ -37,7 +37,7 @@ type Options struct {
 }
 
 func (o *Options) SetAuth(req *http.Request) {
-	if len(o.AuthToken) > 0 {
+	if o.AuthToken != "" {
 		req.Header.Add(Authorization, fmt.Sprintf("%s%s", BearerPrefix, o.AuthToken))
 	}
 }

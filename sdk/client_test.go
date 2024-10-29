@@ -3,7 +3,6 @@ package sdk_test
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -209,13 +208,6 @@ func getMockClient(host string, statusCode int, bodyStr string, doErr error) (*h
 		SetPathsWithNoRetriesFunc: func(paths []string) {},
 	}
 	return healthcheck.NewClientWithClienter(sdk.Service, host, c), c
-}
-
-func getExampleFeedbackJSON() []byte {
-	f := getExampleFeedback()
-	feedbackJSON, err := json.Marshal(f)
-	So(err, ShouldBeNil)
-	return feedbackJSON
 }
 
 func getExampleFeedback() *models.Feedback {

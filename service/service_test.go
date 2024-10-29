@@ -12,7 +12,6 @@ import (
 
 	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/dp-feedback-api/service"
-	"github.com/ONSdigital/dp-feedback-api/service/mock"
 	serviceMock "github.com/ONSdigital/dp-feedback-api/service/mock"
 
 	"github.com/pkg/errors"
@@ -30,14 +29,6 @@ var (
 var (
 	errHealthcheck = errors.New("healthCheck error")
 )
-
-var funcDoGetHealthcheckErr = func(cfg *config.Config, buildTime string, gitCommit string, version string) (service.HealthChecker, error) {
-	return nil, errHealthcheck
-}
-
-var funcDoGetHTTPServerNil = func(bindAddr string, router http.Handler) service.HTTPServer {
-	return nil
-}
 
 func TestInit(t *testing.T) {
 	Convey("Having a set of mocked dependencies", t, func() {
@@ -104,12 +95,12 @@ func TestStart(t *testing.T) {
 		cfg, err := config.Get()
 		So(err, ShouldBeNil)
 
-		hcMock := &mock.HealthCheckerMock{
+		hcMock := &serviceMock.HealthCheckerMock{
 			StartFunc: func(ctx context.Context) {},
 		}
 
 		serverWg := &sync.WaitGroup{}
-		serverMock := &mock.HTTPServerMock{}
+		serverMock := &serviceMock.HTTPServerMock{}
 
 		svc := &service.Service{
 			Config:      cfg,
@@ -164,7 +155,7 @@ func TestClose(t *testing.T) {
 		}
 
 		// server Shutdown will fail if healthcheck is not stopped
-		serverMock := &mock.HTTPServerMock{
+		serverMock := &serviceMock.HTTPServerMock{
 			ListenAndServeFunc: func() error { return nil },
 			ShutdownFunc: func(ctx context.Context) error {
 				if !hcStopped {
@@ -200,7 +191,7 @@ func TestClose(t *testing.T) {
 
 		Convey("If service times out while shutting down, the Close operation fails with the expected error", func() {
 			cfg.GracefulShutdownTimeout = 1 * time.Millisecond
-			timeoutServerMock := &mock.HTTPServerMock{
+			timeoutServerMock := &serviceMock.HTTPServerMock{
 				ListenAndServeFunc: func() error { return nil },
 				ShutdownFunc: func(ctx context.Context) error {
 					time.Sleep(100 * time.Millisecond)

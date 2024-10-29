@@ -8,6 +8,11 @@ import (
 	"github.com/ONSdigital/dp-feedback-api/models"
 )
 
+const (
+	WholeSite     = "The whole website"
+	ASpecificPage = "A specific page"
+)
+
 // PostFeedback is the handler for POST /feedback
 // It unmarshals and validates the feedback data before sending to configured email account
 func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
@@ -19,9 +24,11 @@ func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := feedback.Validate(api.Cfg); err != nil {
-		api.handleError(ctx, w, err, http.StatusBadRequest)
-		return
+	if feedback.OnsURL != WholeSite {
+		if err := feedback.Validate(api.Cfg); err != nil {
+			api.handleError(ctx, w, err, http.StatusBadRequest)
+			return
+		}
 	}
 
 	feedback.Sanitize(api.Cfg.Sanitize)
@@ -43,24 +50,34 @@ func GenerateFeedbackMessage(f *models.Feedback, from, to string) []byte {
 
 	b.WriteString(fmt.Sprintf("From: %s\n", from))
 	b.WriteString(fmt.Sprintf("To: %s\n", to))
-	b.WriteString(fmt.Sprintf("Subject: Feedback received\n\n"))
+	b.WriteString("Subject: Feedback received\n\n")
 
-	b.WriteString(fmt.Sprintf("Is page useful: %t\n", *f.IsPageUseful))
-	b.WriteString(fmt.Sprintf("Is general feedback: %t\n", *f.IsGeneralFeedback))
+	if *f.IsPageUseful {
+		b.WriteString("Feedback Form: Is Page Useful\n")
+	}
 
-	if len(f.OnsURL) > 0 {
+	if *f.IsGeneralFeedback {
+		b.WriteString("Feedback Form: General Feedback\n")
+	}
+
+	if f.OnsURL != "" {
+		if f.OnsURL == WholeSite {
+			b.WriteString(fmt.Sprintf("Feedback Type: %s\n", WholeSite))
+		} else {
+			b.WriteString(fmt.Sprintf("Feedback Type: %s\n", ASpecificPage))
+		}
 		b.WriteString(fmt.Sprintf("Page URL: %s\n", f.OnsURL))
 	}
 
-	if len(f.Feedback) > 0 {
+	if f.Feedback != "" {
 		b.WriteString(fmt.Sprintf("Description: %s\n", f.Feedback))
 	}
 
-	if len(f.Name) > 0 {
+	if f.Name != "" {
 		b.WriteString(fmt.Sprintf("Name: %s\n", f.Name))
 	}
 
-	if len(f.EmailAddress) > 0 {
+	if f.EmailAddress != "" {
 		b.WriteString(fmt.Sprintf("Email address: %s\n", f.EmailAddress))
 	}
 

@@ -23,14 +23,6 @@ func (f *ComponentTest) InitializeScenario(ctx *godog.ScenarioContext) {
 		panic(err)
 	}
 
-	ctx.BeforeScenario(func(*godog.Scenario) {
-		component.Reset()
-	})
-
-	ctx.AfterScenario(func(*godog.Scenario, error) {
-		_ = component.Close()
-	})
-
 	component.RegisterSteps(ctx)
 }
 

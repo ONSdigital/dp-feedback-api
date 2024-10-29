@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/dp-feedback-api/service"
@@ -35,14 +36,14 @@ func main() {
 	ctx := context.Background()
 
 	if err := run(ctx); err != nil {
-		log.Fatal(nil, "fatal runtime error", err)
+		log.Fatal(ctx, "fatal runtime error", err)
 		os.Exit(1)
 	}
 }
 
 func run(ctx context.Context) error {
 	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt, os.Kill)
+	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
 	svcErrors := make(chan error, 1)
 
 	// Read config

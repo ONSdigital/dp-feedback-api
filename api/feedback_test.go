@@ -1,27 +1,14 @@
 package api_test
 
 import (
-	"context"
 	"testing"
 
 	"github.com/ONSdigital/dp-feedback-api/api"
-	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/ONSdigital/dp-feedback-api/models"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 var (
-	ctx = context.Background()
-	cfg = &config.Config{
-		OnsDomain:    "testhost",
-		FeedbackFrom: "sender@mail.com",
-		FeedbackTo:   "receiver@mail.com",
-		Sanitize: &config.Sanitize{
-			HTML:  true,
-			SQL:   true,
-			NoSQL: true,
-		},
-	}
 	feedbackPayload = `{
 		"is_page_useful": true,
 		"is_general_feedback": false,

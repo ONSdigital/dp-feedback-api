@@ -1,7 +1,6 @@
 package models_test
 
 import (
-	"context"
 	"fmt"
 	"testing"
 
@@ -11,7 +10,6 @@ import (
 )
 
 var (
-	ctx               = context.Background()
 	onsHost           = "testhost"
 	cfg               = &config.Config{OnsDomain: onsHost}
 	pageIsUseful      = true
