@@ -52,14 +52,6 @@ func GenerateFeedbackMessage(f *models.Feedback, from, to string) []byte {
 	b.WriteString(fmt.Sprintf("To: %s\n", to))
 	b.WriteString("Subject: Feedback received\n\n")
 
-	if *f.IsPageUseful {
-		b.WriteString("Feedback Form: Is Page Useful\n")
-	}
-
-	if *f.IsGeneralFeedback {
-		b.WriteString("Feedback Form: General Feedback\n")
-	}
-
 	if f.OnsURL != "" {
 		if f.OnsURL == WholeSite {
 			b.WriteString(fmt.Sprintf("Feedback Type: %s\n", WholeSite))

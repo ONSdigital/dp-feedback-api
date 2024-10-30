@@ -25,8 +25,7 @@ var expectedEmail = `From: sender@mail.com
 To: receiver@mail.com
 Subject: Feedback received
 
-Is page useful: true
-Is general feedback: false
+Feedback Type: A specific page
 Page URL: https://testhost:1234/sub/path
 Description: very nice and useful website!
 Name: Mr Feedback reporter
