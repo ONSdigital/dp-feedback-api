@@ -30,6 +30,7 @@ parameters:
       required: 
         - is_page_useful
         - is_general_feedback
+        - feedback
       properties:
         is_page_useful:
           type: boolean
