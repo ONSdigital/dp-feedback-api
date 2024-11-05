@@ -21,8 +21,7 @@ Feature: Feedback
         To: receiver@feedback.com
         Subject: Feedback received
 
-        Is page useful: true
-        Is general feedback: false
+        Feedback Type: A specific page
         Page URL: https://localhost/subpath/one
         Description: very nice and useful website!
         Name: Mr Reporter
@@ -36,7 +35,8 @@ Feature: Feedback
       """
         {
           "is_page_useful": true,
-          "is_general_feedback":false
+          "is_general_feedback":false,
+          "feedback": "very nice and useful website!"
         }
       """
     Then I should receive a 201 status code with an empty body response
@@ -46,8 +46,7 @@ Feature: Feedback
         To: receiver@feedback.com
         Subject: Feedback received
 
-        Is page useful: true
-        Is general feedback: false
+        Description: very nice and useful website!
       """
 
 
@@ -91,7 +90,7 @@ Feature: Feedback
       """
         {
           "is_page_useful": true,
-          "is_general_feedback": true,
+          "is_general_feedback": false,
           "ons_url": "https://localhost/subpath/one",
           "feedback": "<script>document.getElementById('demo').innerHTML = 'Hello JavaScript!'';</script>"
         }
@@ -103,8 +102,7 @@ Feature: Feedback
         To: receiver@feedback.com
         Subject: Feedback received
 
-        Is page useful: true
-        Is general feedback: true
+        Feedback Type: A specific page
         Page URL: https://localhost/subpath/one
         Description: &lt;script&gt;document.getElementById(\&#39;demo\&#39;).innerHTML = \&#39;Hello JavaScript!\&#39;\&#39;;&lt;/script&gt;
       """
