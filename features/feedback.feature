@@ -35,8 +35,7 @@ Feature: Feedback
       """
         {
           "is_page_useful": true,
-          "is_general_feedback":false,
-          "feedback": "very nice and useful website!"
+          "is_general_feedback":false
         }
       """
     Then I should receive a 201 status code with an empty body response
@@ -45,8 +44,6 @@ Feature: Feedback
         From: sender@feedback.com
         To: receiver@feedback.com
         Subject: Feedback received
-
-        Description: very nice and useful website!
       """
 
 

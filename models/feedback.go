@@ -12,7 +12,7 @@ type Feedback struct {
 	IsPageUseful      *bool  `json:"is_page_useful"         validate:"required"`
 	IsGeneralFeedback *bool  `json:"is_general_feedback"    validate:"required"`
 	OnsURL            string `json:"ons_url,omitempty"      validate:"omitempty,ons_url"`
-	Feedback          string `json:"feedback"				validate:"required"`
+	Feedback          string `json:"feedback,omitempty"`
 	Name              string `json:"name,omitempty"`
 	EmailAddress      string `json:"email_address,omitempty" validate:"omitempty,email"`
 }
