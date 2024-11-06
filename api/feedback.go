@@ -48,10 +48,8 @@ func GenerateFeedbackMessage(f *models.Feedback, from, to string) []byte {
 	b.WriteString(fmt.Sprintf("To: %s\n", to))
 	b.WriteString("Subject: Feedback received\n\n")
 
-	if *f.IsPageUseful {
+	if !*f.IsGeneralFeedback {
 		b.WriteString(fmt.Sprintf("Feedback Type: %s\n", mapper.ASpecificPage))
-	} else {
-		b.WriteString(fmt.Sprintf("Feedback Type: %s\n", mapper.WholeSite))
 	}
 
 	if f.OnsURL != "" {

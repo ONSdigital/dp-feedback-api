@@ -48,7 +48,6 @@ Feature: Feedback
         To: receiver@feedback.com
         Subject: Feedback received
 
-        Feedback Type: The whole website
         Description: very nice and useful website!
         Name: Mr Reporter
         Email address: feedback@reporter.com
