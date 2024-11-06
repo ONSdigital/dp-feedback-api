@@ -29,14 +29,14 @@ func (s SMTPSender) Send(from string, to []string, msg []byte) error {
 func NewSMTPSender(cfg *config.Mail) *SMTPSender {
 	auth := smtp.PlainAuth(
 		"",
-		cfg.MailUser,
-		cfg.MailPassword,
-		cfg.MailHost,
+		cfg.User,
+		cfg.Password,
+		cfg.Host,
 	)
-	if cfg.MailHost == "localhost" {
+	if cfg.Host == "localhost" {
 		auth = unencryptedAuth{auth}
 	}
-	mailAddr := fmt.Sprintf("%s:%s", cfg.MailHost, cfg.MailPort)
+	mailAddr := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 
 	return &SMTPSender{
 		Addr: mailAddr,

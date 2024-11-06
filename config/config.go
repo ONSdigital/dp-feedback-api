@@ -22,10 +22,10 @@ type Config struct {
 
 // Mail represents the subset of configuration corresponding to the email service
 type Mail struct {
-	MailHost     string `envconfig:"MAIL_HOST"`
-	MailUser     string `envconfig:"MAIL_USER"`
-	MailPassword string `envconfig:"MAIL_PASSWORD" json:"-"`
-	MailPort     string `envconfig:"MAIL_PORT"`
+	Host     string `envconfig:"MAIL_HOST"`
+	User     string `envconfig:"MAIL_USER"`
+	Password string `envconfig:"MAIL_PASSWORD" json:"-"`
+	Port     string `envconfig:"MAIL_PORT"`
 }
 
 // Sanitize represents the subset of configuration corresponding to the input string sanitization
@@ -54,10 +54,10 @@ func Get() (*Config, error) {
 		FeedbackTo:                 "to@gmail.com",
 		FeedbackFrom:               "from@gmail.com",
 		Mail: &Mail{
-			MailHost:     "localhost",
-			MailPort:     "1025",
-			MailUser:     "",
-			MailPassword: "",
+			Host:     "localhost",
+			Port:     "1025",
+			User:     "",
+			Password: "",
 		},
 		Sanitize: &Sanitize{
 			HTML:  true,
