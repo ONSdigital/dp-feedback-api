@@ -2,17 +2,12 @@ module github.com/ONSdigital/dp-feedback-api
 
 go 1.23
 
-replace google.golang.org/grpc => google.golang.org/grpc v1.55.0
-
-replace google.golang.org/protobuf => google.golang.org/protobuf v1.33.0
-
-replace golang.org/x/net => golang.org/x/net v0.23.0
-
 require (
-	github.com/ONSdigital/dp-api-clients-go/v2 v2.261.0
+	github.com/ONSdigital/dp-api-clients-go/v2 v2.260.0
 	github.com/ONSdigital/dp-component-test v0.9.2
+	github.com/ONSdigital/dp-frontend-feedback-controller v1.6.0
 	github.com/ONSdigital/dp-healthcheck v1.6.3
-	github.com/ONSdigital/dp-net/v2 v2.12.0
+	github.com/ONSdigital/dp-net/v2 v2.11.2
 	github.com/ONSdigital/log.go/v2 v2.4.3
 	github.com/cucumber/godog v0.12.6
 	github.com/go-chi/chi/v5 v5.0.8
@@ -25,7 +20,6 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
-	github.com/ONSdigital/dp-frontend-feedback-controller v1.6.0 // indirect
 	github.com/ONSdigital/dp-mongodb-in-memory v1.6.0 // indirect
 	github.com/ONSdigital/dp-renderer/v2 v2.10.0 // indirect
 	github.com/c2h5oh/datasize v0.0.0-20231215233829-aa82cc1e6500 // indirect
@@ -76,10 +70,10 @@ require (
 	go.opentelemetry.io/otel v1.31.0 // indirect
 	go.opentelemetry.io/otel/metric v1.31.0 // indirect
 	go.opentelemetry.io/otel/trace v1.31.0 // indirect
-	golang.org/x/crypto v0.21.0 // indirect
-	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/sync v0.1.0 // indirect
+	golang.org/x/crypto v0.28.0 // indirect
+	golang.org/x/net v0.24.0 // indirect
+	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/text v0.19.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
