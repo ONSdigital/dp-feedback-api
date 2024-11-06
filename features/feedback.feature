@@ -29,13 +29,16 @@ Feature: Feedback
       """
 
 
-  Scenario: Posting valid feedback with only required fields
+  Scenario: Posting valid general feedback
     Given I am authorised
     When I POST "/feedback"
       """
         {
-          "is_page_useful": true,
-          "is_general_feedback":false
+          "is_page_useful": false,
+          "is_general_feedback": true,
+          "feedback": "very nice and useful website!",
+          "name": "Mr Reporter",
+          "email_address": "feedback@reporter.com"
         }
       """
     Then I should receive a 201 status code with an empty body response
@@ -44,6 +47,33 @@ Feature: Feedback
         From: sender@feedback.com
         To: receiver@feedback.com
         Subject: Feedback received
+
+        Feedback Type: The whole website
+        Description: very nice and useful website!
+        Name: Mr Reporter
+        Email address: feedback@reporter.com
+      """
+
+
+  Scenario: Posting valid feedback with only required fields
+    Given I am authorised
+    When I POST "/feedback"
+      """
+        {
+          "is_page_useful": true,
+          "is_general_feedback":false,
+          "feedback": "very nice and useful page!"
+        }
+      """
+    Then I should receive a 201 status code with an empty body response
+    And The following email is sent
+      """
+        From: sender@feedback.com
+        To: receiver@feedback.com
+        Subject: Feedback received
+
+        Feedback Type: A specific page
+        Description: very nice and useful page!
       """
 
 
