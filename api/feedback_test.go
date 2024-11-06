@@ -17,8 +17,9 @@ var (
 		"name": "Mr Feedback reporter",
 		"email_address": "feedback@reporter.com"
 	}`
-	isPageUseful      = true
-	isGeneralFeedback = false
+	isPageUseful       = true
+	isGeneralFeedback  = true
+	notGeneralFeedBack = false
 )
 
 var expectedEmail = `From: sender@mail.com
@@ -32,7 +33,28 @@ Name: Mr Feedback reporter
 Email address: feedback@reporter.com
 `
 
+var expectedGeneralEmail = `From: sender@mail.com
+To: receiver@mail.com
+Subject: Feedback received
+
+Page URL: https://testhost:1234/sub/path
+Description: very nice and useful website!
+Name: Mr Feedback reporter
+Email address: feedback@reporter.com
+`
+
 func testFeedback() *models.Feedback {
+	return &models.Feedback{
+		IsPageUseful:      &isPageUseful,
+		IsGeneralFeedback: &notGeneralFeedBack,
+		OnsURL:            "https://testhost:1234/sub/path",
+		Feedback:          "very nice and useful website!",
+		Name:              "Mr Feedback reporter",
+		EmailAddress:      "feedback@reporter.com",
+	}
+}
+
+func testGeneralFeedback() *models.Feedback {
 	return &models.Feedback{
 		IsPageUseful:      &isPageUseful,
 		IsGeneralFeedback: &isGeneralFeedback,
@@ -48,5 +70,11 @@ func TestGenerateFeedbackMessage(t *testing.T) {
 		f := testFeedback()
 		generated := api.GenerateFeedbackMessage(f, "sender@mail.com", "receiver@mail.com")
 		So(string(generated), ShouldEqual, expectedEmail)
+	})
+
+	Convey("The expected general email is generated from a valid feedback model", t, func() {
+		f := testGeneralFeedback()
+		generated := api.GenerateFeedbackMessage(f, "sender@mail.com", "receiver@mail.com")
+		So(string(generated), ShouldEqual, expectedGeneralEmail)
 	})
 }
