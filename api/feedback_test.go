@@ -37,7 +37,6 @@ var expectedGeneralEmail = `From: sender@mail.com
 To: receiver@mail.com
 Subject: Feedback received
 
-Page URL: https://testhost:1234/sub/path
 Description: very nice and useful website!
 Name: Mr Feedback reporter
 Email address: feedback@reporter.com
@@ -58,7 +57,6 @@ func testGeneralFeedback() *models.Feedback {
 	return &models.Feedback{
 		IsPageUseful:      &isPageUseful,
 		IsGeneralFeedback: &isGeneralFeedback,
-		OnsURL:            "https://testhost:1234/sub/path",
 		Feedback:          "very nice and useful website!",
 		Name:              "Mr Feedback reporter",
 		EmailAddress:      "feedback@reporter.com",
