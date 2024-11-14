@@ -54,6 +54,22 @@ Feature: Feedback
       """
 
 
+  Scenario: Posting invalid general feedback
+    Given I am authorised
+    When I POST "/feedback"
+      """
+        {
+          "is_page_useful": false,
+          "is_general_feedback": true
+        }
+      """
+    Then I should receive a 400 status code with an the following body response
+      """
+        description is required if page is not useful
+      """
+      And No email is sent
+
+
   Scenario: Posting valid feedback with only required fields
     Given I am authorised
     When I POST "/feedback"
