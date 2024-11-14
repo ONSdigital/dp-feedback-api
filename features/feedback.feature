@@ -6,7 +6,7 @@ Feature: Feedback
     When I POST "/feedback"
       """
         {
-          "is_page_useful": true,
+          "is_page_useful": false,
           "is_general_feedback": false,
           "ons_url": "https://localhost/subpath/one",
           "feedback": "very nice and useful website!",
@@ -59,7 +59,7 @@ Feature: Feedback
     When I POST "/feedback"
       """
         {
-          "is_page_useful": true,
+          "is_page_useful": false,
           "is_general_feedback":false,
           "feedback": "very nice and useful page!"
         }
@@ -115,7 +115,7 @@ Feature: Feedback
     When I POST "/feedback"
       """
         {
-          "is_page_useful": true,
+          "is_page_useful": false,
           "is_general_feedback": false,
           "ons_url": "https://localhost/subpath/one",
           "feedback": "<script>document.getElementById('demo').innerHTML = 'Hello JavaScript!'';</script>"
