@@ -27,15 +27,23 @@ func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	feedback.Sanitize(api.Cfg.Sanitize)
+	// Only send email if page is not useful
+	// This is expected when the user chooses "Yes" from the feedback footer options
+	if !*feedback.IsPageUseful {
+		if feedback.Feedback != "" {
+			feedback.Sanitize(api.Cfg.Sanitize)
 
-	if err := api.EmailSender.Send(
-		api.Cfg.FeedbackFrom,
-		[]string{api.Cfg.FeedbackTo},
-		GenerateFeedbackMessage(feedback, api.Cfg.FeedbackFrom, api.Cfg.FeedbackTo),
-	); err != nil {
-		api.handleError(ctx, w, fmt.Errorf("failed to send message: %w", err), http.StatusInternalServerError)
-		return
+			if err := api.EmailSender.Send(
+				api.Cfg.FeedbackFrom,
+				[]string{api.Cfg.FeedbackTo},
+				GenerateFeedbackMessage(feedback, api.Cfg.FeedbackFrom, api.Cfg.FeedbackTo),
+			); err != nil {
+				api.handleError(ctx, w, fmt.Errorf("failed to send message: %w", err), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			api.handleError(ctx, w, fmt.Errorf("description is required if page is not useful"), http.StatusBadRequest)
+		}
 	}
 
 	w.WriteHeader(http.StatusCreated)
