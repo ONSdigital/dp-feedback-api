@@ -15,7 +15,7 @@ Feature: Feedback
         }
       """
     Then I should receive a 201 status code with an empty body response
-    And The following email is sent
+    And the following email is sent
       """
         From: sender@feedback.com
         To: receiver@feedback.com
@@ -27,6 +27,19 @@ Feature: Feedback
         Name: Mr Reporter
         Email address: feedback@reporter.com
       """
+
+
+  Scenario: Posting valid useful page feedback
+    Given I am authorised
+    When I POST "/feedback"
+      """
+        {
+          "is_page_useful": true,
+          "is_general_feedback": false
+        }
+      """
+    Then I should receive a 201 status code with an empty body response
+    And no email is sent
 
 
   Scenario: Posting valid general feedback
@@ -42,7 +55,7 @@ Feature: Feedback
         }
       """
     Then I should receive a 201 status code with an empty body response
-    And The following email is sent
+    And the following email is sent
       """
         From: sender@feedback.com
         To: receiver@feedback.com
@@ -67,7 +80,7 @@ Feature: Feedback
       """
         description is required if page is not useful
       """
-      And No email is sent
+      And no email is sent
 
 
   Scenario: Posting valid feedback with only required fields
@@ -81,7 +94,7 @@ Feature: Feedback
         }
       """
     Then I should receive a 201 status code with an empty body response
-    And The following email is sent
+    And the following email is sent
       """
         From: sender@feedback.com
         To: receiver@feedback.com
@@ -106,7 +119,7 @@ Feature: Feedback
       """
         Key: 'Feedback.OnsURL' Error:Field validation for 'OnsURL' failed on the 'ons_url' tag
       """
-    And No email is sent
+    And no email is sent
 
 
   Scenario: Posting feedback with an invalid email address
@@ -123,7 +136,7 @@ Feature: Feedback
       """
         Key: 'Feedback.EmailAddress' Error:Field validation for 'EmailAddress' failed on the 'email' tag
       """
-    And No email is sent
+    And no email is sent
 
 
   Scenario: Posting feedback with unsafe strings
@@ -138,7 +151,7 @@ Feature: Feedback
         }
       """
     Then I should receive a 201 status code with an empty body response
-    And The following email is sent
+    And the following email is sent
       """
         From: sender@feedback.com
         To: receiver@feedback.com

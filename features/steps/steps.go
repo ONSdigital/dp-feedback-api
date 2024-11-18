@@ -15,8 +15,8 @@ func (c *Component) RegisterSteps(ctx *godog.ScenarioContext) {
 
 	ctx.Step(`^I should receive a (\d+) status code with an empty body response`, c.iShouldReceiveAnEmptyResponse)
 	ctx.Step(`^I should receive a (\d+) status code with an the following body response$`, c.iShouldReceiveResponse)
-	ctx.Step(`^The following email is sent$`, c.theFollowingEmailIsSent)
-	ctx.Step(`^No email is sent`, c.noEmailIsSent)
+	ctx.Step(`^the following email is sent$`, c.theFollowingEmailIsSent)
+	ctx.Step(`^no email is sent`, c.noEmailIsSent)
 }
 
 func (c *Component) iShouldReceiveAnEmptyResponse(code string) error {
