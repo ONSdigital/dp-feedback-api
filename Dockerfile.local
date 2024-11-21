@@ -6,7 +6,7 @@ ENV GOCACHE=/go/.go/cache GOPATH=/go/.go/path TZ=Europe/London PATH=$PATH:$GOPAT
 RUN GOBIN=/bin go install github.com/cespare/reflex@v0.3.1
 RUN PATH=$PATH:/bin
 
-# Whitelist directory ensure same owner 
+# Prevent git dubious ownership error
 RUN git config --global --add safe.directory /go
 
 # Clean cache, as we want all modules in the container to be under /go/.go/path
