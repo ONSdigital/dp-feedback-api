@@ -30,10 +30,11 @@ func TestConfig(t *testing.T) {
 					FeedbackTo:                 "to@gmail.com",
 					FeedbackFrom:               "from@gmail.com",
 					Mail: &Mail{
-						Host:     "localhost",
-						Port:     "1025",
-						User:     "",
-						Password: "",
+						Host:      "localhost",
+						Port:      "1025",
+						User:      "",
+						Password:  "",
+						Encrypted: true,
 					},
 					Sanitize: &Sanitize{
 						HTML:  true,

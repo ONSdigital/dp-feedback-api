@@ -12,10 +12,6 @@ type SMTPSender struct {
 	Auth smtp.Auth
 }
 
-type unencryptedAuth struct {
-	smtp.Auth
-}
-
 func (s SMTPSender) Send(from string, to []string, msg []byte) error {
 	return smtp.SendMail(
 		s.Addr,
@@ -27,14 +23,16 @@ func (s SMTPSender) Send(from string, to []string, msg []byte) error {
 
 // NewSMTPSender returns a new SMTPSender according to the provided mail configuration
 func NewSMTPSender(cfg *config.Mail) *SMTPSender {
-	auth := smtp.PlainAuth(
-		"",
-		cfg.User,
-		cfg.Password,
-		cfg.Host,
-	)
-	if cfg.Host == "localhost" {
-		auth = unencryptedAuth{auth}
+	var auth smtp.Auth
+	if cfg.Encrypted {
+		auth = smtp.PlainAuth(
+			"",
+			cfg.User,
+			cfg.Password,
+			cfg.Host,
+		)
+	} else {
+		auth = smtp.CRAMMD5Auth(cfg.User, cfg.Password)
 	}
 	mailAddr := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 
