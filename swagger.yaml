@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   title: "dp-feedback-api"
   description: | 
-    This API is used to subimt feedback from other DP services for internal
+    This API is used to submit feedback from other Dissemination services for internal
     distribution, analysis and action.
   version: 1.0.0
   license:
@@ -15,8 +15,8 @@ tags:
   - name: "feedback"
   - name: "private"
 securityDefinitions:
-  InternalAPIKey:
-    name: internal-token
+  AuthorizationToken:
+    name: Authorization
     description: "API key used to allow only internal services to post feedback"
     in: header
     type: apiKey
@@ -66,7 +66,7 @@ paths:
         500:
           $ref: '#/responses/InternalError'
       security:
-        - InternalAPIKey: []
+        - AuthorizationToken: []
   /health:
     get:
       tags:
