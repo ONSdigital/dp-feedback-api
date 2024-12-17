@@ -30,7 +30,7 @@ func (c *Component) iShouldReceiveAnEmptyResponse(code string) error {
 
 func (c *Component) iShouldReceiveResponse(code string, documentJSON *godog.DocString) error {
 	// Validate status code
-	statusCode := c.apiFeature.HttpResponse.StatusCode
+	statusCode := c.apiFeature.HTTPResponse.StatusCode
 	expectedCode, err := strconv.Atoi(code)
 	if err != nil {
 		return fmt.Errorf("cannot parse expected code: %w", err)
@@ -39,7 +39,7 @@ func (c *Component) iShouldReceiveResponse(code string, documentJSON *godog.DocS
 
 	// Validate body
 	var expectedBody = trimLines(documentJSON.Content)
-	responseBody := c.apiFeature.HttpResponse.Body
+	responseBody := c.apiFeature.HTTPResponse.Body
 	body, err := io.ReadAll(responseBody)
 	if err != nil {
 		return fmt.Errorf("cannot read body from response: %w", err)
