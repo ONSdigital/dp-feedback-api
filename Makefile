@@ -14,8 +14,11 @@ audit:
 	go list -json -m all | nancy sleuth
 
 .PHONY: lint
-lint:
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.61.0
+lint: ## Used in ci to run linters against Go code
+	golangci-lint run ./...
+
+.PHONY: lint-local
+lint-local: ## Use locally to run linters against Go code
 	golangci-lint run ./...
 
 .PHONY: build
