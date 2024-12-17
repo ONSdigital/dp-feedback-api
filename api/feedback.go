@@ -6,7 +6,11 @@ import (
 	"net/http"
 
 	"github.com/ONSdigital/dp-feedback-api/models"
-	"github.com/ONSdigital/dp-frontend-feedback-controller/mapper"
+)
+
+const (
+	WholeSite     = "The whole website"
+	ASpecificPage = "A specific page"
 )
 
 // PostFeedback is the handler for POST /feedback
@@ -20,7 +24,7 @@ func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if feedback.OnsURL != mapper.WholeSite {
+	if feedback.OnsURL != WholeSite {
 		if err := feedback.Validate(api.Cfg); err != nil {
 			api.handleError(ctx, w, err, http.StatusBadRequest)
 			return
@@ -57,7 +61,7 @@ func GenerateFeedbackMessage(f *models.Feedback, from, to string) []byte {
 	b.WriteString("Subject: Feedback received\n\n")
 
 	if !*f.IsGeneralFeedback {
-		b.WriteString(fmt.Sprintf("Feedback Type: %s\n", mapper.ASpecificPage))
+		b.WriteString(fmt.Sprintf("Feedback Type: %s\n", ASpecificPage))
 	}
 
 	if f.OnsURL != "" {
