@@ -150,7 +150,7 @@ func TestPostFeedback(t *testing.T) {
 
 			Convey("Then the expected request is sent with the expected path, method and auth header", func() {
 				So(httpClientMock.DoCalls(), ShouldHaveLength, 1)
-				So(httpClientMock.DoCalls()[0].Req.URL.String(), ShouldEqual, "http://localhost:1234/v1/feedback")
+				So(httpClientMock.DoCalls()[0].Req.URL.String(), ShouldEqual, "http://localhost:1234/feedback")
 				So(httpClientMock.DoCalls()[0].Req.Method, ShouldEqual, http.MethodPost)
 				So(httpClientMock.DoCalls()[0].Req.Header.Get(sdk.Authorization), ShouldEqual, "Bearer serviceToken")
 			})

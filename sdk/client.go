@@ -16,7 +16,7 @@ import (
 // package level constants
 const (
 	Service          = "dp-feedback-api"
-	FeedbackEndpoint = "%s/v1/feedback"
+	FeedbackEndpoint = "%s/feedback"
 	Authorization    = "Authorization"
 	BearerPrefix     = "Bearer "
 )
