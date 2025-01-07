@@ -14,13 +14,13 @@ Initialise new Feedback API client
 package main
 
 import (
-	"context"
-	"github.com/ONSdigital/dp-feedback-api/sdk"
+    "context"
+    "github.com/ONSdigital/dp-feedback-api/sdk"
 )
 
 func main() {
     ...
-	feedbackAPIClient := sdk.New("http://localhost:28600")
+    feedbackAPIClient := sdk.New("http://localhost:28600")
     ...
 }
 ```
@@ -33,10 +33,10 @@ Use the PostFeedback method to send a request to send a feedback email via the f
 ...
     // Create the feedback model you want to send
     f := &models.Feedback{
-		IsPageUseful:      &isPageUsefulVal,
-		IsGeneralFeedback: &isGeneralFeedbackVal,
+        IsPageUseful:      &isPageUsefulVal,
+        IsGeneralFeedback: &isGeneralFeedbackVal,
         ...
-	}
+    }
 
     // Pass the authorisation token (without the 'Bearer ' prefix) as an SDK Option parameter
     opts := sdk.Options{AuthToken: authToken}
@@ -82,6 +82,6 @@ If your app is using the [dp-healthcheck library](https://github.com/ONSdigital/
     err := hc.AddCheck("Feedback API", apiClient.Checker)
     if err != nil {
         // handle error
-	}
+    }
 ...
 ```
