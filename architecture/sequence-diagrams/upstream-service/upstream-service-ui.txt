@@ -1,0 +1,21 @@
+title Upstream Service UI and API
+
+autonumber
+entryspacing 1.0
+
+actor User
+
+note over User: User navigates to upstream service \nwith feedback footer
+
+User->Frontend Router:Https GET: upstream service page
+
+Frontend Router->Upstream Service Controller: Https GET: Render template
+
+note over User: Interacts with footer and chooses "No"
+note over User: Fills required fields on feedback form
+note over User: Submits form and make a direct request to the API
+
+User->API Router:Https POST: Submit request to REST endpoint
+API Router->Feedback API: Reverse Proxy\n to correct API
+
+note over Feedback API: Return a successful response
