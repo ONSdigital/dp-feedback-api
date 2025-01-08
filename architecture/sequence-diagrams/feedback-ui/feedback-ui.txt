@@ -5,18 +5,31 @@ entryspacing 1.0
 
 actor User
 
-note over User: User navigates to feedback page on website
+note over User: Navigates to feedback page on website
 
 User->Frontend Router: Https GET: feedback page
 
 Frontend Router->Frontend Feedback Controller: Https GET: Render template
 
-note over Frontend Feedback Controller:User fills required fields on feedback form
+note over User: Fill form with the required fields
+
+User->Frontend Feedback Controller:Https POST: Submit form data to feedback controller
 
 Frontend Feedback Controller->API Router:Https POST: Submit form data to REST endpoint
-
-note over User: Makes request directly to API
-User->API Router:Https POST: Submit request to REST endpoint
 API Router->Feedback API: Reverse Proxy\n to correct API
 
-note over Feedback API: Return a successful response
+note over Feedback API: Validate and process request
+
+alt Successful validation
+  Feedback API->API Router: Return success response
+
+  API Router->Frontend Feedback Controller: Forward success response
+
+  Frontend Feedback Controller->User: Redirect to "Thank You" page
+else Failed validation
+    Feedback API->API Router: Return failed response
+
+  API Router->Frontend Feedback Controller:Forward failed response
+
+  Frontend Feedback Controller->User:Display failed message
+end

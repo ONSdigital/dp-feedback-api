@@ -5,7 +5,7 @@ entryspacing 1.0
 
 actor User
 
-note over User: User navigates to upstream service \nwith feedback footer
+note over User: Navigates to upstream service \nwith feedback footer
 
 User->Frontend Router:Https GET: upstream service page
 
@@ -18,4 +18,20 @@ note over User: Submits form and make a direct request to the API
 User->API Router:Https POST: Submit request to REST endpoint
 API Router->Feedback API: Reverse Proxy\n to correct API
 
-note over Feedback API: Return a successful response
+note over Feedback API: Validate and process request
+
+alt Successful validation
+
+  Feedback API->API Router: Return success response
+
+  API Router->Upstream Service Controller: Forward success response
+
+  Upstream Service Controller->User: Display "Thank you" message
+
+else Failed validation
+  Feedback API->API Router: Return failed response
+
+  API Router->Upstream Service Controller:Forward failed response
+
+  Upstream Service Controller->User:Display failed message
+end
