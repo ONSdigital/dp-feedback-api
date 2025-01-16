@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/ONSdigital/dp-feedback-api/config"
 	"github.com/go-playground/validator/v10"
@@ -17,16 +18,14 @@ type Feedback struct {
 	EmailAddress      string `json:"email_address,omitempty" validate:"omitempty,email"`
 }
 
+var cfg *config.Config
+
 // getURLDomainValidator returns a validator func that checks that a field contains
-// a valid URL with a hostname corresponding to the provided domain
-func getURLDomainValidator(domain string) validator.Func {
+// a valid URL with a hostname that ends with the provided domain
+func getURLDomainValidator(onsDomain string) validator.Func {
 	return func(fl validator.FieldLevel) bool {
-		val := fl.Field().String()
-		onsURL, err := url.Parse(val)
-		if err != nil {
-			return false
-		}
-		return onsURL.Hostname() == domain
+		urlField := fl.Field().String()
+		return IsSiteDomainURL(urlField, onsDomain)
 	}
 }
 
@@ -46,4 +45,37 @@ func (f *Feedback) Sanitize(cfg *config.Sanitize) {
 	f.Feedback = Sanitize(cfg, f.Feedback)
 	f.Name = Sanitize(cfg, f.Name)
 	f.EmailAddress = Sanitize(cfg, f.EmailAddress)
+}
+
+// IsSiteDomainURL is true when urlString is a URL and its host ends with `.`+siteDomain (when siteDomain is blank, or uses config.SiteDomain)
+func IsSiteDomainURL(urlString, siteDomain string) bool {
+	if urlString == "" {
+		return false
+	}
+	urlString = NormaliseURL(urlString)
+	urlObject, err := url.ParseRequestURI(urlString)
+	if err != nil {
+		return false
+	}
+	if siteDomain == "" {
+		if cfg == nil {
+			if cfg, err = config.Get(); err != nil {
+				return false
+			}
+		}
+		siteDomain = cfg.OnsDomain
+	}
+	hostName := urlObject.Hostname()
+	if hostName != siteDomain && !strings.HasSuffix(hostName, "."+siteDomain) {
+		return false
+	}
+	return true
+}
+
+// NormaliseURL when a string is a URL without a scheme (e.g. `host.name/path`), add it (`https://`)
+func NormaliseURL(urlString string) string {
+	if strings.HasPrefix(urlString, "http") {
+		return urlString
+	}
+	return "https://" + urlString
 }
