@@ -1,11 +1,13 @@
 package models
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"strings"
 
 	"github.com/ONSdigital/dp-feedback-api/config"
+	"github.com/ONSdigital/log.go/v2/log"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -49,17 +51,20 @@ func (f *Feedback) Sanitize(cfg *config.Sanitize) {
 
 // IsSiteDomainURL is true when urlString is a URL and its host ends with `.`+siteDomain (when siteDomain is blank, or uses config.SiteDomain)
 func IsSiteDomainURL(urlString, siteDomain string) bool {
+	ctx := context.Background()
 	if urlString == "" {
 		return false
 	}
 	urlString = NormaliseURL(urlString)
 	urlObject, err := url.ParseRequestURI(urlString)
 	if err != nil {
+		log.Error(ctx, "error parsing URL", err)
 		return false
 	}
 	if siteDomain == "" {
 		if cfg == nil {
 			if cfg, err = config.Get(); err != nil {
+				log.Error(ctx, "error getting config", err)
 				return false
 			}
 		}
