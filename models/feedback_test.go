@@ -56,6 +56,17 @@ func TestValidate(t *testing.T) {
 		})
 	})
 
+	Convey("Given a Feedback model where 'ons_url' is subnet of invalid domain", t, func() {
+		f := validFeedbackModel()
+		f.OnsURL = "https://www.somedomain/sub/path"
+
+		Convey("Then the validation fails with the expected error", func() {
+			err := f.Validate(cfg)
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "Key: 'Feedback.OnsURL' Error:Field validation for 'OnsURL' failed on the 'ons_url' tag")
+		})
+	})
+
 	Convey("Given a Feedback model where 'is_page_useful' is not provided'", t, func() {
 		f := validFeedbackModel()
 		f.IsPageUseful = nil
