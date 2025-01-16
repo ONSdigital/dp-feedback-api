@@ -47,6 +47,15 @@ func TestValidate(t *testing.T) {
 		})
 	})
 
+	Convey("Given a Feedback model where 'ons_url' is subnet of domain", t, func() {
+		f := validFeedbackModel()
+		f.OnsURL = fmt.Sprintf("https://www.%s:1234/sub/path", onsHost)
+
+		Convey("Then validation is successful", func() {
+			So(f.Validate(cfg), ShouldBeNil)
+		})
+	})
+
 	Convey("Given a Feedback model where 'is_page_useful' is not provided'", t, func() {
 		f := validFeedbackModel()
 		f.IsPageUseful = nil
