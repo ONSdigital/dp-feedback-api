@@ -13,7 +13,7 @@ import (
 	"github.com/ONSdigital/dp-feedback-api/models"
 	"github.com/ONSdigital/dp-feedback-api/sdk"
 	health "github.com/ONSdigital/dp-healthcheck/healthcheck"
-	dphttp "github.com/ONSdigital/dp-net/v2/http"
+	dphttp "github.com/ONSdigital/dp-net/v3/http"
 	. "github.com/smartystreets/goconvey/convey"
 )
 

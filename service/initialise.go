@@ -8,7 +8,7 @@ import (
 	"github.com/ONSdigital/dp-feedback-api/email"
 
 	"github.com/ONSdigital/dp-healthcheck/healthcheck"
-	dphttp "github.com/ONSdigital/dp-net/v2/http"
+	dphttp "github.com/ONSdigital/dp-net/v3/http"
 )
 
 // GetHTTPServer creates an http server and sets the Server
