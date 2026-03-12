@@ -33,7 +33,7 @@ type Client struct {
 
 // Options is a struct containing for customised options for the API client
 type Options struct {
-	AuthToken string
+	AuthToken string //nolint:gosec // G117 false positive, not a hardcoded credential
 }
 
 func (o *Options) SetAuth(req *http.Request) {

@@ -56,8 +56,8 @@ func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 func GenerateFeedbackMessage(f *models.Feedback, from, to string) []byte {
 	var b bytes.Buffer
 
-	fmt.Fprintf(&b, "From: %s\n", from)
-	fmt.Fprintf(&b, "To: %s\n", to)
+	fmt.Fprintf(&b, "From: %s\n", from) //nolint:gosec // G705 false positive, from is a config value
+	fmt.Fprintf(&b, "To: %s\n", to)     //nolint:gosec // G705 false positive, to is a config value
 	b.WriteString("Subject: Feedback received\n\n")
 
 	if !*f.IsGeneralFeedback {
