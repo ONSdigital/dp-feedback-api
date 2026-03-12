@@ -56,28 +56,28 @@ func (api *API) PostFeedback(w http.ResponseWriter, r *http.Request) {
 func GenerateFeedbackMessage(f *models.Feedback, from, to string) []byte {
 	var b bytes.Buffer
 
-	b.WriteString(fmt.Sprintf("From: %s\n", from))
-	b.WriteString(fmt.Sprintf("To: %s\n", to))
+	fmt.Fprintf(&b, "From: %s\n", from)
+	fmt.Fprintf(&b, "To: %s\n", to)
 	b.WriteString("Subject: Feedback received\n\n")
 
 	if !*f.IsGeneralFeedback {
-		b.WriteString(fmt.Sprintf("Feedback Type: %s\n", ASpecificPage))
+		fmt.Fprintf(&b, "Feedback Type: %s\n", ASpecificPage)
 	}
 
 	if f.OnsURL != "" {
-		b.WriteString(fmt.Sprintf("Page URL: %s\n", f.OnsURL))
+		fmt.Fprintf(&b, "Page URL: %s\n", f.OnsURL)
 	}
 
 	if f.Feedback != "" {
-		b.WriteString(fmt.Sprintf("Description: %s\n", f.Feedback))
+		fmt.Fprintf(&b, "Description: %s\n", f.Feedback)
 	}
 
 	if f.Name != "" {
-		b.WriteString(fmt.Sprintf("Name: %s\n", f.Name))
+		fmt.Fprintf(&b, "Name: %s\n", f.Name)
 	}
 
 	if f.EmailAddress != "" {
-		b.WriteString(fmt.Sprintf("Email address: %s\n", f.EmailAddress))
+		fmt.Fprintf(&b, "Email address: %s\n", f.EmailAddress)
 	}
 
 	return b.Bytes()
